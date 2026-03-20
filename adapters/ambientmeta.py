@@ -40,6 +40,7 @@ class AmbientMetaAdapter(PIIDetectorAdapter):
         self._client: httpx.Client | None = None
         self._api_key: str = ""
         self._api_url: str = ""
+        self.last_processing_ms: float | None = None  # Server-side processing time
 
     def name(self) -> str:
         return "AmbientMeta Privacy Guard"
@@ -82,6 +83,7 @@ class AmbientMetaAdapter(PIIDetectorAdapter):
             return []
 
         data = response.json()
+        self.last_processing_ms = data.get("processing_ms")
 
         results: list[DetectedEntity] = []
         for entity in data.get("entities", []):

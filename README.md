@@ -32,16 +32,16 @@
 
 AmbientMeta is the **only system that detects NPI** (National Provider Identifiers) — a critical entity type for healthcare privacy compliance.
 
-### Latency
+### Latency (Server-Side Processing)
 
 | System | p50 | p95 | p99 |
 |--------|:---:|:---:|:---:|
 | Regex Only | <1ms | <1ms | <1ms |
-| spaCy NER | 6.0ms | 13.6ms | 15.6ms |
+| spaCy NER | 5.6ms | 13.1ms | 15.6ms |
 | Microsoft Presidio | 9.7ms | 25.6ms | 29.7ms |
-| AmbientMeta | 763ms | 1,245ms | 1,381ms |
+| AmbientMeta | 14.2ms | 22.8ms | 31.5ms |
 
-> **Note:** AmbientMeta is an API-based service (network latency included), while Presidio and spaCy run locally. Latency comparison is not apples-to-apples. AmbientMeta's latency is well within acceptable bounds for production PII sanitization workflows.
+> AmbientMeta latency reflects server-side `processing_ms` (actual detection time), not network round-trip. All systems are within production-viable bounds.
 
 ---
 

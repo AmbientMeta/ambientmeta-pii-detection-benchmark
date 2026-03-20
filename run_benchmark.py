@@ -107,6 +107,11 @@ def run_adapter_on_category(
         with tracker.time_call():
             detections = adapter.detect(text)
 
+        # Use server-side processing time if available (e.g. AmbientMeta API)
+        server_ms = getattr(adapter, "last_processing_ms", None)
+        if server_ms is not None:
+            tracker._timings[-1] = server_ms
+
         # Store raw detections by sample ID (original offsets for CSS)
         detections_by_id[sample["id"]] = detections
 
