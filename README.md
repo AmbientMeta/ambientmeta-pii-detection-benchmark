@@ -10,22 +10,22 @@
 
 | System | Overall F1 | Standard F1 | Ambiguous F1 | CSS | Adversarial F1 |
 |--------|:---------:|:-----------:|:------------:|:---:|:--------------:|
-| **AmbientMeta Privacy Guard** | **50.7%** | 49.6% | **44.3%** | **50.5%** | **62.9%** |
-| Microsoft Presidio | 45.7% | **49.7%** | 39.6% | 37.0% | 51.9% |
+| **AmbientMeta Privacy Guard** | **52.3%** | 54.0% | **44.3%** | **50.5%** | **63.0%** |
+| Microsoft Presidio | 47.7% | **54.9%** | 39.6% | 37.0% | 52.3% |
 | spaCy NER | 30.0% | 21.3% | 37.2% | 40.5% | 37.3% |
-| Regex Only | 28.0% | 40.0% | 6.8% | 3.0% | 28.5% |
+| Regex Only | 28.7% | 41.8% | 6.8% | 3.0% | 28.5% |
 
-> **Headline:** AmbientMeta leads with **50.7% overall F1** — 5 points ahead of Presidio. Context Sensitivity Score is **50.5%** — 13 points ahead of Presidio (37.0%) and 10 points ahead of spaCy NER (40.5%). AmbientMeta is the only system that detects healthcare entities (NPI: 88.7%, MRN: 71.2%).
+> **Headline:** AmbientMeta leads with **52.3% overall F1** — 5 points ahead of Presidio. Context Sensitivity Score is **50.5%** — 13 points ahead of Presidio (37.0%) and 10 points ahead of spaCy NER (40.5%). AmbientMeta is the only system that detects healthcare entities (NPI: 88.7%, MRN: 71.2%).
 
 ### Per-Entity F1
 
 | Entity Type | AmbientMeta | Presidio | spaCy NER | Regex |
 |-------------|:-----------:|:--------:|:---------:|:-----:|
-| PERSON | **60.8%** | 59.4% | 59.4% | 0.0% |
+| PERSON | **60.7%** | 59.4% | 59.4% | 0.0% |
 | EMAIL | 95.5% | **98.2%** | 0.0% | 95.0% |
-| PHONE | **79.2%** | 53.9% | 0.0% | 55.5% |
+| PHONE | **79.2%** | 54.0% | 0.0% | 55.5% |
 | SSN | **83.4%** | 64.0% | 0.0% | 76.0% |
-| CREDIT_CARD | 23.3% | 23.3% | 0.0% | **72.7%** |
+| CREDIT_CARD | 81.8% | **90.6%** | 0.0% | 84.3% |
 | LOCATION | **37.7%** | 31.0% | 31.0% | 0.0% |
 | NPI | **88.7%** | 0.0% | 0.0% | 0.0% |
 | MRN | **71.2%** | 0.0% | 0.0% | 0.0% |
@@ -38,9 +38,9 @@ AmbientMeta is the **only system that detects NPI and MRN** — critical entity 
 | System | p50 | p95 | p99 |
 |--------|:---:|:---:|:---:|
 | Regex Only | <1ms | <1ms | <1ms |
-| spaCy NER | 5.9ms | 13.2ms | 15.5ms |
-| Microsoft Presidio | 9.8ms | 26.1ms | 31.3ms |
-| AmbientMeta | 107ms | 411ms | 679ms |
+| spaCy NER | 6.7ms | 13.2ms | 15.5ms |
+| Microsoft Presidio | 12.2ms | 26.1ms | 31.3ms |
+| AmbientMeta | 106ms | 411ms | 679ms |
 
 > AmbientMeta latency reflects server-side `processing_ms` (actual detection time), not network round-trip. Higher latency reflects multi-tier detection architecture (regex + NER + compiled rules).
 
