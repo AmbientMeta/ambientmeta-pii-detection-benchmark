@@ -30,14 +30,10 @@ const FALLBACK_DATA = {
     }
 };
 
-async function loadResults() {
-    try {
-        const resp = await fetch('../results/latest.json');
-        if (!resp.ok) throw new Error('not found');
-        return await resp.json();
-    } catch {
-        return FALLBACK_DATA;
-    }
+function loadResults() {
+    // Data is embedded in FALLBACK_DATA above — always available, no fetch needed.
+    // To use live results instead, serve results/latest.json alongside docs/.
+    return FALLBACK_DATA;
 }
 
 function getAdapterColor(key) {
@@ -347,8 +343,8 @@ function renderLatencyTable(data) {
 
 // ─── Init ───────────────────────────────────────────────────────────
 
-async function init() {
-    const data = await loadResults();
+function init() {
+    const data = loadResults();
 
     renderResultsTable(data);
     renderOverallChart(data);
