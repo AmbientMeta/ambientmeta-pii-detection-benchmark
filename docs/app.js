@@ -20,13 +20,13 @@ Chart.defaults.color = CHART_DEFAULTS.color;
 Chart.defaults.borderColor = CHART_DEFAULTS.borderColor;
 Chart.defaults.font.family = CHART_DEFAULTS.font.family;
 
-// Fallback data if results/latest.json can't be loaded
+// Embedded results data (also serves as fallback if fetch fails)
 const FALLBACK_DATA = {
     adapters: {
-        regex:       { name: 'Regex Only',                aggregate: { f1: 0.244, per_type: {} }, categories: { standard: { metrics: { f1: 0.314 } }, ambiguous: { metrics: { f1: 0.068 } }, contextual: { metrics: { f1: 0.057 }, css: { css: 0.030 } }, adversarial: { metrics: { f1: 0.280 } } } },
-        spacy:       { name: 'spaCy NER',                 aggregate: { f1: 0.300, per_type: {} }, categories: { standard: { metrics: { f1: 0.213 } }, ambiguous: { metrics: { f1: 0.372 } }, contextual: { metrics: { f1: 0.227 }, css: { css: 0.405 } }, adversarial: { metrics: { f1: 0.373 } } } },
-        presidio:    { name: 'Microsoft Presidio',        aggregate: { f1: 0.443, per_type: {} }, categories: { standard: { metrics: { f1: 0.458 } }, ambiguous: { metrics: { f1: 0.396 } }, contextual: { metrics: { f1: 0.266 }, css: { css: 0.370 } }, adversarial: { metrics: { f1: 0.517 } } } },
-        ambientmeta: { name: 'AmbientMeta Privacy Guard', aggregate: { f1: 0.443, per_type: {} }, categories: { standard: { metrics: { f1: 0.405 } }, ambiguous: { metrics: { f1: 0.444 } }, contextual: { metrics: { f1: 0.286 }, css: { css: 0.500 } }, adversarial: { metrics: { f1: 0.540 } } } },
+        regex:       { name: 'Regex Only',                aggregate: { f1: 0.244, per_type: {"PERSON":{"f1":0.0},"CREDIT_CARD":{"f1":0.4091},"LOCATION":{"f1":0.0},"EMAIL":{"f1":0.9498},"SSN":{"f1":0.4466},"PHONE":{"f1":0.5331},"MRN":{"f1":0.0},"ORGANIZATION":{"f1":0.0},"NPI":{"f1":0.0}} }, categories: { standard: { metrics: { f1: 0.314 } }, ambiguous: { metrics: { f1: 0.068 } }, contextual: { metrics: { f1: 0.057 }, css: { css: 0.030 } }, adversarial: { metrics: { f1: 0.280 } } } },
+        spacy:       { name: 'spaCy NER',                 aggregate: { f1: 0.300, per_type: {"PERSON":{"f1":0.5938},"CREDIT_CARD":{"f1":0.0},"LOCATION":{"f1":0.3099},"EMAIL":{"f1":0.0},"ORGANIZATION":{"f1":0.1286},"SSN":{"f1":0.0},"PHONE":{"f1":0.0},"MRN":{"f1":0.0},"NPI":{"f1":0.0}} }, categories: { standard: { metrics: { f1: 0.213 } }, ambiguous: { metrics: { f1: 0.372 } }, contextual: { metrics: { f1: 0.227 }, css: { css: 0.405 } }, adversarial: { metrics: { f1: 0.373 } } } },
+        presidio:    { name: 'Microsoft Presidio',        aggregate: { f1: 0.443, per_type: {"PERSON":{"f1":0.5938},"CREDIT_CARD":{"f1":0.1},"LOCATION":{"f1":0.3099},"EMAIL":{"f1":0.9821},"SSN":{"f1":0.4407},"PHONE":{"f1":0.5256},"MRN":{"f1":0.0},"ORGANIZATION":{"f1":0.0},"NPI":{"f1":0.0}} }, categories: { standard: { metrics: { f1: 0.458 } }, ambiguous: { metrics: { f1: 0.396 } }, contextual: { metrics: { f1: 0.266 }, css: { css: 0.370 } }, adversarial: { metrics: { f1: 0.517 } } } },
+        ambientmeta: { name: 'AmbientMeta Privacy Guard', aggregate: { f1: 0.443, per_type: {"PERSON":{"f1":0.6089},"CREDIT_CARD":{"f1":0.1429},"LOCATION":{"f1":0.3759},"EMAIL":{"f1":0.955},"ORGANIZATION":{"f1":0.1342},"SSN":{"f1":0.5593},"PHONE":{"f1":0.7578},"MRN":{"f1":0.0},"NPI":{"f1":0.0777}} }, categories: { standard: { metrics: { f1: 0.405 } }, ambiguous: { metrics: { f1: 0.444 } }, contextual: { metrics: { f1: 0.286 }, css: { css: 0.500 } }, adversarial: { metrics: { f1: 0.540 } } } },
     }
 };
 
