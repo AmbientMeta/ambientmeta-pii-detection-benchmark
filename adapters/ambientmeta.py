@@ -70,7 +70,14 @@ class AmbientMetaAdapter(PIIDetectorAdapter):
                 json={
                     "text": text,
                     "mode": "sanitize",
-                    "config": {"confidence_threshold": 0.0},
+                    "config": {
+                        "confidence_threshold": 0.0,
+                        "entities": [
+                            "PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "SSN",
+                            "CREDIT_CARD", "LOCATION", "ADDRESS", "ORGANIZATION",
+                            "NPI", "MRN", "DEA",
+                        ],
+                    },
                 },
             )
             if response.status_code == 429:
