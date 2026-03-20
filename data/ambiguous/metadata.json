@@ -1,0 +1,8 @@
+{
+  "category": "ambiguous",
+  "description": "Spans where the same string could be multiple entity types depending on context. Tests disambiguation ability.",
+  "target_count": 300,
+  "entity_types": ["PERSON", "PHONE", "NPI", "MRN", "LOCATION", "ORGANIZATION"],
+  "difficulty": "ambiguous",
+  "sources": ["synthetic", "ambiguous_curated", "healthcare"]
+}

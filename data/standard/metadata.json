@@ -1,0 +1,8 @@
+{
+  "category": "standard",
+  "description": "Clear, unambiguous PII entities. Baseline category where all systems should score well.",
+  "target_count": 500,
+  "entity_types": ["PERSON", "EMAIL", "PHONE", "SSN", "CREDIT_CARD", "LOCATION"],
+  "difficulty": "standard",
+  "sources": ["synthetic", "ai4privacy", "gretel_pii_en", "kaggle_pii_7k"]
+}

@@ -1,0 +1,9 @@
+{
+  "category": "contextual",
+  "description": "Paired samples where the same surface string has different ground-truth classifications in different contexts. Used for Context Sensitivity Score (CSS) computation.",
+  "target_count": 200,
+  "entity_types": ["PERSON", "LOCATION", "ORGANIZATION", "PHONE", "NPI"],
+  "difficulty": "contextual",
+  "sources": ["synthetic", "ontonotes5", "few_nerd"],
+  "note": "Samples are paired via the 'context_pair' field. Each pair contains the same ambiguous string classified differently based on surrounding context."
+}

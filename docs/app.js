@@ -1,0 +1,372 @@
+/* PII Detection Benchmark — Chart.js Visualizations */
+
+const COLORS = {
+    ambientmeta: { bg: 'rgba(42, 122, 226, 0.8)', border: '#2a7ae2' },
+    presidio:    { bg: 'rgba(167, 139, 250, 0.8)', border: '#a78bfa' },
+    spacy:       { bg: 'rgba(52, 211, 153, 0.8)',  border: '#34d399' },
+    regex:       { bg: 'rgba(100, 116, 139, 0.8)', border: '#64748b' },
+};
+
+const SYSTEM_ORDER = ['ambientmeta', 'presidio', 'spacy', 'regex'];
+const CATEGORIES = ['standard', 'ambiguous', 'contextual', 'adversarial'];
+
+const CHART_DEFAULTS = {
+    color: '#94a3b8',
+    borderColor: '#334155',
+    font: { family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" },
+};
+
+Chart.defaults.color = CHART_DEFAULTS.color;
+Chart.defaults.borderColor = CHART_DEFAULTS.borderColor;
+Chart.defaults.font.family = CHART_DEFAULTS.font.family;
+
+// Fallback data if results/latest.json can't be loaded
+const FALLBACK_DATA = {
+    adapters: {
+        regex:       { name: 'Regex Only',                aggregate: { f1: 0.244, per_type: {} }, categories: { standard: { metrics: { f1: 0.314 } }, ambiguous: { metrics: { f1: 0.068 } }, contextual: { metrics: { f1: 0.057 }, css: { css: 0.030 } }, adversarial: { metrics: { f1: 0.280 } } } },
+        spacy:       { name: 'spaCy NER',                 aggregate: { f1: 0.300, per_type: {} }, categories: { standard: { metrics: { f1: 0.213 } }, ambiguous: { metrics: { f1: 0.372 } }, contextual: { metrics: { f1: 0.227 }, css: { css: 0.405 } }, adversarial: { metrics: { f1: 0.373 } } } },
+        presidio:    { name: 'Microsoft Presidio',        aggregate: { f1: 0.443, per_type: {} }, categories: { standard: { metrics: { f1: 0.458 } }, ambiguous: { metrics: { f1: 0.396 } }, contextual: { metrics: { f1: 0.266 }, css: { css: 0.370 } }, adversarial: { metrics: { f1: 0.517 } } } },
+        ambientmeta: { name: 'AmbientMeta Privacy Guard', aggregate: { f1: 0.443, per_type: {} }, categories: { standard: { metrics: { f1: 0.405 } }, ambiguous: { metrics: { f1: 0.444 } }, contextual: { metrics: { f1: 0.286 }, css: { css: 0.500 } }, adversarial: { metrics: { f1: 0.540 } } } },
+    }
+};
+
+async function loadResults() {
+    try {
+        const resp = await fetch('../results/latest.json');
+        if (!resp.ok) throw new Error('not found');
+        return await resp.json();
+    } catch {
+        return FALLBACK_DATA;
+    }
+}
+
+function getAdapterColor(key) {
+    return COLORS[key] || { bg: 'rgba(148, 163, 184, 0.8)', border: '#94a3b8' };
+}
+
+function pct(val) {
+    return (val * 100).toFixed(1) + '%';
+}
+
+function getSystemName(data, key) {
+    return data.adapters[key]?.name || key;
+}
+
+function getOrderedAdapters(data) {
+    return SYSTEM_ORDER.filter(k => k in data.adapters);
+}
+
+// ─── Results Table ──────────────────────────────────────────────────
+
+function renderResultsTable(data) {
+    const tbody = document.getElementById('resultsBody');
+    const adapters = getOrderedAdapters(data);
+
+    // Find best values per column
+    const cols = ['overall', 'standard', 'ambiguous', 'css', 'adversarial'];
+    const best = {};
+    for (const col of cols) {
+        let maxVal = -1;
+        for (const key of adapters) {
+            const a = data.adapters[key];
+            let val;
+            if (col === 'overall') val = a.aggregate?.f1 || 0;
+            else if (col === 'css') val = a.categories?.contextual?.css?.css || 0;
+            else val = a.categories?.[col]?.metrics?.f1 || 0;
+            if (val > maxVal) maxVal = val;
+        }
+        best[col] = maxVal;
+    }
+
+    for (const key of adapters) {
+        const a = data.adapters[key];
+        const overall = a.aggregate?.f1 || 0;
+        const standard = a.categories?.standard?.metrics?.f1 || 0;
+        const ambiguous = a.categories?.ambiguous?.metrics?.f1 || 0;
+        const css = a.categories?.contextual?.css?.css || 0;
+        const adversarial = a.categories?.adversarial?.metrics?.f1 || 0;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="system-name">${a.name}</td>
+            <td class="${overall >= best.overall ? 'best' : ''}">${pct(overall)}</td>
+            <td class="${standard >= best.standard ? 'best' : ''}">${pct(standard)}</td>
+            <td class="${ambiguous >= best.ambiguous ? 'best' : ''}">${pct(ambiguous)}</td>
+            <td class="${css >= best.css ? 'best' : ''}">${pct(css)}</td>
+            <td class="${adversarial >= best.adversarial ? 'best' : ''}">${pct(adversarial)}</td>
+        `;
+        tbody.appendChild(row);
+    }
+}
+
+// ─── Overall F1 Bar Chart ───────────────────────────────────────────
+
+function renderOverallChart(data) {
+    const adapters = getOrderedAdapters(data);
+    const ctx = document.getElementById('overallChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: CATEGORIES.map(c => c.charAt(0).toUpperCase() + c.slice(1)),
+            datasets: adapters.map(key => ({
+                label: getSystemName(data, key),
+                data: CATEGORIES.map(cat =>
+                    (data.adapters[key].categories?.[cat]?.metrics?.f1 || 0) * 100
+                ),
+                backgroundColor: getAdapterColor(key).bg,
+                borderColor: getAdapterColor(key).border,
+                borderWidth: 1,
+                borderRadius: 3,
+            })),
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'rect' } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%` } },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 70,
+                    ticks: { callback: v => v + '%' },
+                    grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                },
+                x: { grid: { display: false } },
+            },
+        },
+    });
+}
+
+// ─── CSS Bar Chart ──────────────────────────────────────────────────
+
+function renderCSSChart(data) {
+    const adapters = getOrderedAdapters(data);
+    const ctx = document.getElementById('cssChart').getContext('2d');
+
+    const cssValues = adapters.map(key =>
+        (data.adapters[key].categories?.contextual?.css?.css || 0) * 100
+    );
+    const names = adapters.map(key => getSystemName(data, key));
+    const colors = adapters.map(key => getAdapterColor(key).bg);
+    const borders = adapters.map(key => getAdapterColor(key).border);
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: names,
+            datasets: [{
+                label: 'CSS',
+                data: cssValues,
+                backgroundColor: colors,
+                borderColor: borders,
+                borderWidth: 1,
+                borderRadius: 4,
+            }],
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: (ctx) => `CSS: ${ctx.parsed.x.toFixed(1)}%` } },
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 65,
+                    ticks: { callback: v => v + '%' },
+                    grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                },
+                y: { grid: { display: false } },
+            },
+        },
+    });
+}
+
+// ─── Per-Entity Chart + Table ───────────────────────────────────────
+
+function renderEntityChart(data) {
+    const adapters = getOrderedAdapters(data);
+
+    // Collect all entity types
+    const allTypes = new Set();
+    for (const key of adapters) {
+        const perType = data.adapters[key].aggregate?.per_type || {};
+        Object.keys(perType).forEach(t => allTypes.add(t));
+    }
+    const entityTypes = Array.from(allTypes).sort();
+
+    // Chart
+    const ctx = document.getElementById('entityChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: entityTypes,
+            datasets: adapters.map(key => ({
+                label: getSystemName(data, key),
+                data: entityTypes.map(t =>
+                    (data.adapters[key].aggregate?.per_type?.[t]?.f1 || 0) * 100
+                ),
+                backgroundColor: getAdapterColor(key).bg,
+                borderColor: getAdapterColor(key).border,
+                borderWidth: 1,
+                borderRadius: 2,
+            })),
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'rect' } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%` } },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { callback: v => v + '%' },
+                    grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                },
+                x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+            },
+        },
+    });
+
+    // Table
+    const thead = document.getElementById('entityTableHead');
+    const tbody = document.getElementById('entityTableBody');
+
+    thead.innerHTML = '<th>Entity Type</th>' + adapters.map(key =>
+        `<th>${getSystemName(data, key)}</th>`
+    ).join('');
+
+    for (const etype of entityTypes) {
+        const vals = adapters.map(key => data.adapters[key].aggregate?.per_type?.[etype]?.f1 || 0);
+        const maxVal = Math.max(...vals);
+
+        const row = document.createElement('tr');
+        row.innerHTML = `<td class="system-name">${etype}</td>` + vals.map(v =>
+            `<td class="${v > 0 && v >= maxVal ? 'best' : ''}">${v > 0 ? pct(v) : '—'}</td>`
+        ).join('');
+        tbody.appendChild(row);
+    }
+}
+
+// ─── Radar Chart ────────────────────────────────────────────────────
+
+function renderRadarChart(data) {
+    const adapters = getOrderedAdapters(data);
+    const ctx = document.getElementById('radarChart').getContext('2d');
+
+    const labels = ['Standard F1', 'Ambiguous F1', 'CSS', 'Adversarial F1', 'Overall F1'];
+
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels,
+            datasets: adapters.map(key => {
+                const a = data.adapters[key];
+                return {
+                    label: a.name,
+                    data: [
+                        (a.categories?.standard?.metrics?.f1 || 0) * 100,
+                        (a.categories?.ambiguous?.metrics?.f1 || 0) * 100,
+                        (a.categories?.contextual?.css?.css || 0) * 100,
+                        (a.categories?.adversarial?.metrics?.f1 || 0) * 100,
+                        (a.aggregate?.f1 || 0) * 100,
+                    ],
+                    borderColor: getAdapterColor(key).border,
+                    backgroundColor: getAdapterColor(key).bg.replace('0.8', '0.15'),
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: getAdapterColor(key).border,
+                };
+            }),
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.r.toFixed(1)}%` } },
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 60,
+                    ticks: { callback: v => v + '%', backdropColor: 'transparent', font: { size: 10 } },
+                    grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                    angleLines: { color: 'rgba(51, 65, 85, 0.5)' },
+                    pointLabels: { font: { size: 12 } },
+                },
+            },
+        },
+    });
+}
+
+// ─── Latency Table ──────────────────────────────────────────────────
+
+function renderLatencyTable(data) {
+    const tbody = document.getElementById('latencyBody');
+    const adapters = getOrderedAdapters(data);
+
+    for (const key of adapters) {
+        const a = data.adapters[key];
+        let totalP50 = 0, totalP95 = 0, totalP99 = 0, totalDocs = 0, totalSecs = 0, count = 0;
+
+        for (const cat of CATEGORIES) {
+            const lat = a.categories?.[cat]?.latency;
+            if (lat && lat.total_docs > 0) {
+                totalP50 += lat.p50_ms || 0;
+                totalP95 += lat.p95_ms || 0;
+                totalP99 += lat.p99_ms || 0;
+                totalDocs += lat.total_docs || 0;
+                totalSecs += lat.total_seconds || 0;
+                count++;
+            }
+        }
+
+        const p50 = count > 0 ? (totalP50 / count).toFixed(1) : '—';
+        const p95 = count > 0 ? (totalP95 / count).toFixed(1) : '—';
+        const p99 = count > 0 ? (totalP99 / count).toFixed(1) : '—';
+        const tps = totalSecs > 0 ? (totalDocs / totalSecs).toFixed(1) + ' docs/s' : '—';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="system-name">${a.name}</td>
+            <td>${p50} ms</td>
+            <td>${p95} ms</td>
+            <td>${p99} ms</td>
+            <td>${tps}</td>
+        `;
+        tbody.appendChild(row);
+    }
+}
+
+// ─── Init ───────────────────────────────────────────────────────────
+
+async function init() {
+    const data = await loadResults();
+
+    renderResultsTable(data);
+    renderOverallChart(data);
+    renderCSSChart(data);
+    renderEntityChart(data);
+    renderRadarChart(data);
+    renderLatencyTable(data);
+
+    // Update hero stats
+    const adapters = getOrderedAdapters(data);
+    document.getElementById('hero-systems').textContent = adapters.length;
+
+    let bestCSS = 0;
+    for (const key of adapters) {
+        const css = data.adapters[key].categories?.contextual?.css?.css || 0;
+        if (css > bestCSS) bestCSS = css;
+    }
+    document.getElementById('hero-css').textContent = pct(bestCSS);
+}
+
+init();

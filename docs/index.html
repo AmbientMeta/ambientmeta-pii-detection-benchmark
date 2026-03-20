@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PII Detection Benchmark — AmbientMeta</title>
+    <meta name="description" content="Open-source benchmark for PII detection systems with Context Sensitivity Scoring. Compare AmbientMeta, Presidio, spaCy, and regex.">
+    <link rel="icon" href="https://ambientmeta.com/assets/Favicon32x32.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <div class="logo">
+                <img src="https://ambientmeta.com/assets/Favicon32x32.png" alt="AmbientMeta" width="28" height="28">
+                <span>PII Detection Benchmark</span>
+            </div>
+            <nav>
+                <a href="#results">Results</a>
+                <a href="#css">CSS Metric</a>
+                <a href="#per-entity">Per-Entity</a>
+                <a href="#run-it">Run It</a>
+                <a href="https://github.com/ambientmeta/ambientmeta-pii-detection-benchmark" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>PII Detection Benchmark</h1>
+        <p class="subtitle">Measuring what matters: not just whether PII is found, but whether your detector understands <em>context</em>.</p>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-value" id="hero-samples">1,200</span>
+                <span class="stat-label">Samples</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value" id="hero-systems">4</span>
+                <span class="stat-label">Systems</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value" id="hero-categories">4</span>
+                <span class="stat-label">Categories</span>
+            </div>
+            <div class="stat highlight">
+                <span class="stat-value" id="hero-css">50.0%</span>
+                <span class="stat-label">Best CSS Score</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="results" class="section">
+        <h2>Overall Results</h2>
+        <p class="section-desc">F1 scores across all four benchmark categories. Higher is better.</p>
+        <div class="chart-row">
+            <div class="chart-container">
+                <canvas id="overallChart"></canvas>
+            </div>
+            <div class="results-table-wrapper">
+                <table id="resultsTable" class="results-table">
+                    <thead>
+                        <tr>
+                            <th>System</th>
+                            <th>Overall F1</th>
+                            <th>Standard</th>
+                            <th>Ambiguous</th>
+                            <th>CSS</th>
+                            <th>Adversarial</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="css" class="section alt">
+        <h2>Context Sensitivity Score</h2>
+        <p class="section-desc">Can your detector classify the same string differently based on context?</p>
+        <div class="css-explainer">
+            <div class="css-example">
+                <div class="example-pair">
+                    <div class="example-card">
+                        <span class="example-label">Document A</span>
+                        <p>"<mark class="person">Jordan</mark> presented the quarterly results to the board."</p>
+                        <span class="entity-tag person">PERSON</span>
+                    </div>
+                    <div class="example-vs">vs</div>
+                    <div class="example-card">
+                        <span class="example-label">Document B</span>
+                        <p>"The shipment arrived in <mark class="location">Jordan</mark> yesterday."</p>
+                        <span class="entity-tag location">LOCATION</span>
+                    </div>
+                </div>
+                <p class="example-caption">Same string, different entity types. A system that classifies both correctly scores +1. Both wrong = 0.</p>
+            </div>
+            <div class="chart-container css-chart">
+                <canvas id="cssChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section id="per-entity" class="section">
+        <h2>Per-Entity F1</h2>
+        <p class="section-desc">How each system performs on individual entity types.</p>
+        <div class="chart-container wide">
+            <canvas id="entityChart"></canvas>
+        </div>
+        <div class="results-table-wrapper">
+            <table id="entityTable" class="results-table">
+                <thead>
+                    <tr id="entityTableHead"></tr>
+                </thead>
+                <tbody id="entityTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="radar" class="section alt">
+        <h2>System Strengths</h2>
+        <p class="section-desc">Radar chart showing each system's strengths across categories.</p>
+        <div class="chart-container radar-container">
+            <canvas id="radarChart"></canvas>
+        </div>
+    </section>
+
+    <section id="latency" class="section">
+        <h2>Latency</h2>
+        <p class="section-desc">Per-document detection latency. Note: AmbientMeta is API-based (network latency included); others run locally.</p>
+        <div class="results-table-wrapper">
+            <table id="latencyTable" class="results-table">
+                <thead>
+                    <tr>
+                        <th>System</th>
+                        <th>p50 (ms)</th>
+                        <th>p95 (ms)</th>
+                        <th>p99 (ms)</th>
+                        <th>Throughput</th>
+                    </tr>
+                </thead>
+                <tbody id="latencyBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="run-it" class="section alt">
+        <h2>Run It Yourself</h2>
+        <p class="section-desc">Clone, install, run. Reproducible results in under 5 minutes.</p>
+        <div class="code-block">
+            <pre><code>git clone https://github.com/ambientmeta/ambientmeta-pii-detection-benchmark
+cd ambientmeta-pii-detection-benchmark
+pip install -e .
+python -m spacy download en_core_web_lg
+python run_benchmark.py</code></pre>
+        </div>
+        <p class="run-note">The benchmark runs without an AmbientMeta API key. Set <code>AMBIENTMETA_API_KEY</code> to include AmbientMeta in the comparison.</p>
+        <div class="cta">
+            <a href="https://ambientmeta.com" class="btn primary" target="_blank">Get a Free API Key</a>
+            <a href="https://github.com/ambientmeta/ambientmeta-pii-detection-benchmark" class="btn secondary" target="_blank">View on GitHub</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="https://ambientmeta.com/assets/Favicon32x32.png" alt="AmbientMeta" width="20" height="20">
+                <span>Built by <a href="https://ambientmeta.com" target="_blank">AmbientMeta</a> — The privacy layer for AI</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://ambientmeta.com/docs" target="_blank">API Docs</a>
+                <a href="https://github.com/ambientmeta/ambientmeta-pii-detection-benchmark" target="_blank">GitHub</a>
+                <span class="footer-license">Apache 2.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
