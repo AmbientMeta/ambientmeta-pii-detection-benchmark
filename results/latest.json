@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2026-03-20T01:53:48.779242+00:00",
+    "timestamp": "2026-03-20T02:40:56.473404+00:00",
     "python_version": "3.13.0 (v3.13.0:60403a5409f, Oct  7 2024, 00:37:40) [Clang 15.0.0 (clang-1500.3.9.4)]",
     "platform": "macOS-15.7.3-x86_64-i386-64bit-Mach-O",
     "dataset_hashes": {
@@ -23,6 +23,38 @@
             "recall": 0.2859,
             "f1": 0.4179,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 48,
+                "fp": 5,
+                "fn": 12,
+                "precision": 0.9057,
+                "recall": 0.8,
+                "f1": 0.8496
+              },
+              "PERSON": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 168,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "EMAIL": {
+                "tp": 81,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.9878,
+                "recall": 0.9419,
+                "f1": 0.9643
+              },
+              "SSN": {
+                "tp": 44,
+                "fp": 4,
+                "fn": 16,
+                "precision": 0.9167,
+                "recall": 0.7333,
+                "f1": 0.8148
+              },
               "LOCATION": {
                 "tp": 0,
                 "fp": 0,
@@ -39,42 +71,10 @@
                 "recall": 0.381,
                 "f1": 0.3879
               },
-              "EMAIL": {
-                "tp": 81,
-                "fp": 1,
-                "fn": 5,
-                "precision": 0.9878,
-                "recall": 0.9419,
-                "f1": 0.9643
-              },
-              "CREDIT_CARD": {
-                "tp": 48,
-                "fp": 5,
-                "fn": 12,
-                "precision": 0.9057,
-                "recall": 0.8,
-                "f1": 0.8496
-              },
               "MRN": {
                 "tp": 0,
                 "fp": 0,
                 "fn": 118,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "SSN": {
-                "tp": 44,
-                "fp": 4,
-                "fn": 16,
-                "precision": 0.9167,
-                "recall": 0.7333,
-                "f1": 0.8148
-              },
-              "PERSON": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 168,
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
@@ -84,11 +84,11 @@
           "latency": {
             "p50_ms": 0.04,
             "p95_ms": 0.07,
-            "p99_ms": 0.1,
+            "p99_ms": 0.11,
             "mean_ms": 0.04,
             "total_docs": 500,
             "total_seconds": 0.02,
-            "throughput_docs_per_sec": 20984.64
+            "throughput_docs_per_sec": 20982.05
           },
           "sample_count": 500
         },
@@ -101,6 +101,46 @@
             "recall": 0.04,
             "f1": 0.068,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 115,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "EMAIL": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 16,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "SSN": {
+                "tp": 0,
+                "fp": 8,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
               "LOCATION": {
                 "tp": 0,
                 "fp": 0,
@@ -117,50 +157,10 @@
                 "recall": 0.8571,
                 "f1": 0.4444
               },
-              "EMAIL": {
-                "tp": 0,
-                "fp": 3,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "CREDIT_CARD": {
-                "tp": 0,
-                "fp": 2,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
               "ORGANIZATION": {
                 "tp": 0,
                 "fp": 0,
                 "fn": 76,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "SSN": {
-                "tp": 0,
-                "fp": 8,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "NPI": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 16,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 115,
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
@@ -174,7 +174,7 @@
             "mean_ms": 0.02,
             "total_docs": 300,
             "total_seconds": 0.01,
-            "throughput_docs_per_sec": 44174.75
+            "throughput_docs_per_sec": 44974.86
           },
           "sample_count": 300
         },
@@ -187,6 +187,22 @@
             "recall": 0.03,
             "f1": 0.0566,
             "per_type": {
+              "PERSON": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 46,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
               "LOCATION": {
                 "tp": 0,
                 "fp": 0,
@@ -218,33 +234,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "NPI": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 4,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 46,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
               }
             }
           },
           "latency": {
             "p50_ms": 0.02,
-            "p95_ms": 0.05,
-            "p99_ms": 0.09,
+            "p95_ms": 0.06,
+            "p99_ms": 0.12,
             "mean_ms": 0.03,
             "total_docs": 200,
             "total_seconds": 0.01,
-            "throughput_docs_per_sec": 34581.48
+            "throughput_docs_per_sec": 28941.68
           },
           "sample_count": 200,
           "css": {
@@ -264,6 +264,46 @@
             "recall": 0.1927,
             "f1": 0.2849,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "PERSON": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 290,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "EMAIL": {
+                "tp": 23,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.9583,
+                "recall": 0.9583,
+                "f1": 0.9583
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 79,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "SSN": {
+                "tp": 5,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.8333,
+                "recall": 0.7143,
+                "f1": 0.7692
+              },
               "LOCATION": {
                 "tp": 0,
                 "fp": 0,
@@ -280,22 +320,6 @@
                 "recall": 0.9652,
                 "f1": 0.6491
               },
-              "EMAIL": {
-                "tp": 23,
-                "fp": 1,
-                "fn": 1,
-                "precision": 0.9583,
-                "recall": 0.9583,
-                "f1": 0.9583
-              },
-              "CREDIT_CARD": {
-                "tp": 3,
-                "fp": 0,
-                "fn": 0,
-                "precision": 1.0,
-                "recall": 1.0,
-                "f1": 1.0
-              },
               "ORGANIZATION": {
                 "tp": 0,
                 "fp": 0,
@@ -311,41 +335,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "SSN": {
-                "tp": 5,
-                "fp": 1,
-                "fn": 2,
-                "precision": 0.8333,
-                "recall": 0.7143,
-                "f1": 0.7692
-              },
-              "NPI": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 79,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 290,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
               }
             }
           },
           "latency": {
             "p50_ms": 0.04,
-            "p95_ms": 0.3,
-            "p99_ms": 0.35,
-            "mean_ms": 0.09,
+            "p95_ms": 0.34,
+            "p99_ms": 0.41,
+            "mean_ms": 0.11,
             "total_docs": 200,
             "total_seconds": 0.02,
-            "throughput_docs_per_sec": 10331.9
+            "throughput_docs_per_sec": 8607.72
           },
           "sample_count": 200
         }
@@ -358,6 +358,38 @@
         "recall": 0.1868,
         "f1": 0.2871,
         "per_type": {
+          "CREDIT_CARD": {
+            "tp": 51,
+            "fp": 7,
+            "fn": 12,
+            "precision": 0.8793,
+            "recall": 0.8095,
+            "f1": 0.843
+          },
+          "PERSON": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 619,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "EMAIL": {
+            "tp": 104,
+            "fp": 5,
+            "fn": 6,
+            "precision": 0.9541,
+            "recall": 0.9455,
+            "f1": 0.9498
+          },
+          "SSN": {
+            "tp": 49,
+            "fp": 13,
+            "fn": 18,
+            "precision": 0.7903,
+            "recall": 0.7313,
+            "f1": 0.7597
+          },
           "LOCATION": {
             "tp": 0,
             "fp": 0,
@@ -374,22 +406,6 @@
             "recall": 0.7318,
             "f1": 0.5552
           },
-          "EMAIL": {
-            "tp": 104,
-            "fp": 5,
-            "fn": 6,
-            "precision": 0.9541,
-            "recall": 0.9455,
-            "f1": 0.9498
-          },
-          "CREDIT_CARD": {
-            "tp": 51,
-            "fp": 7,
-            "fn": 12,
-            "precision": 0.8793,
-            "recall": 0.8095,
-            "f1": 0.843
-          },
           "MRN": {
             "tp": 0,
             "fp": 0,
@@ -398,18 +414,10 @@
             "recall": 0.0,
             "f1": 0.0
           },
-          "SSN": {
-            "tp": 49,
-            "fp": 13,
-            "fn": 18,
-            "precision": 0.7903,
-            "recall": 0.7313,
-            "f1": 0.7597
-          },
-          "PERSON": {
+          "NPI": {
             "tp": 0,
             "fp": 0,
-            "fn": 619,
+            "fn": 99,
             "precision": 0.0,
             "recall": 0.0,
             "f1": 0.0
@@ -418,14 +426,6 @@
             "tp": 0,
             "fp": 0,
             "fn": 229,
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
-          },
-          "NPI": {
-            "tp": 0,
-            "fp": 0,
-            "fn": 99,
             "precision": 0.0,
             "recall": 0.0,
             "f1": 0.0
@@ -445,6 +445,38 @@
             "recall": 0.2064,
             "f1": 0.2128,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 60,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 93,
+                "fp": 103,
+                "fn": 75,
+                "precision": 0.4745,
+                "recall": 0.5536,
+                "f1": 0.511
+              },
+              "EMAIL": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 86,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "SSN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 60,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
               "LOCATION": {
                 "tp": 55,
                 "fp": 75,
@@ -461,18 +493,10 @@
                 "recall": 0.0,
                 "f1": 0.0
               },
-              "EMAIL": {
+              "ORGANIZATION": {
                 "tp": 0,
-                "fp": 0,
-                "fn": 86,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "CREDIT_CARD": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 60,
+                "fp": 348,
+                "fn": 0,
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
@@ -484,41 +508,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "ORGANIZATION": {
-                "tp": 0,
-                "fp": 348,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "SSN": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 60,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 93,
-                "fp": 103,
-                "fn": 75,
-                "precision": 0.4745,
-                "recall": 0.5536,
-                "f1": 0.511
               }
             }
           },
           "latency": {
-            "p50_ms": 6.67,
-            "p95_ms": 9.77,
-            "p99_ms": 12.36,
-            "mean_ms": 6.96,
+            "p50_ms": 6.8,
+            "p95_ms": 9.75,
+            "p99_ms": 12.63,
+            "mean_ms": 7.08,
             "total_docs": 500,
-            "total_seconds": 3.49,
-            "throughput_docs_per_sec": 143.31
+            "total_seconds": 3.55,
+            "throughput_docs_per_sec": 140.9
           },
           "sample_count": 500
         },
@@ -531,6 +531,22 @@
             "recall": 0.4767,
             "f1": 0.3724,
             "per_type": {
+              "PERSON": {
+                "tp": 78,
+                "fp": 97,
+                "fn": 37,
+                "precision": 0.4457,
+                "recall": 0.6783,
+                "f1": 0.5379
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 16,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
               "LOCATION": {
                 "tp": 45,
                 "fp": 106,
@@ -554,33 +570,17 @@
                 "precision": 0.1408,
                 "recall": 0.2632,
                 "f1": 0.1835
-              },
-              "NPI": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 16,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 78,
-                "fp": 97,
-                "fn": 37,
-                "precision": 0.4457,
-                "recall": 0.6783,
-                "f1": 0.5379
               }
             }
           },
           "latency": {
-            "p50_ms": 4.99,
-            "p95_ms": 7.87,
-            "p99_ms": 10.64,
-            "mean_ms": 5.42,
+            "p50_ms": 4.8,
+            "p95_ms": 7.18,
+            "p99_ms": 8.42,
+            "mean_ms": 5.17,
             "total_docs": 300,
-            "total_seconds": 1.63,
-            "throughput_docs_per_sec": 183.92
+            "total_seconds": 1.55,
+            "throughput_docs_per_sec": 193.08
           },
           "sample_count": 300
         },
@@ -593,6 +593,22 @@
             "recall": 0.39,
             "f1": 0.2274,
             "per_type": {
+              "PERSON": {
+                "tp": 17,
+                "fp": 93,
+                "fn": 29,
+                "precision": 0.1545,
+                "recall": 0.3696,
+                "f1": 0.2179
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
               "LOCATION": {
                 "tp": 50,
                 "fp": 176,
@@ -624,33 +640,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "NPI": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 4,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 17,
-                "fp": 93,
-                "fn": 29,
-                "precision": 0.1545,
-                "recall": 0.3696,
-                "f1": 0.2179
               }
             }
           },
           "latency": {
-            "p50_ms": 5.62,
-            "p95_ms": 7.76,
-            "p99_ms": 10.09,
-            "mean_ms": 5.85,
+            "p50_ms": 5.58,
+            "p95_ms": 7.45,
+            "p99_ms": 8.37,
+            "mean_ms": 5.77,
             "total_docs": 200,
-            "total_seconds": 1.17,
-            "throughput_docs_per_sec": 170.49
+            "total_seconds": 1.16,
+            "throughput_docs_per_sec": 173.01
           },
           "sample_count": 200,
           "css": {
@@ -670,6 +670,46 @@
             "recall": 0.4016,
             "f1": 0.3733,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 233,
+                "fp": 85,
+                "fn": 57,
+                "precision": 0.7327,
+                "recall": 0.8034,
+                "f1": 0.7664
+              },
+              "EMAIL": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 24,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 79,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "SSN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 7,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
               "LOCATION": {
                 "tp": 15,
                 "fp": 154,
@@ -682,22 +722,6 @@
                 "tp": 0,
                 "fp": 0,
                 "fn": 115,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "EMAIL": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 24,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "CREDIT_CARD": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 3,
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
@@ -717,41 +741,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "SSN": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 7,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "NPI": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 79,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 233,
-                "fp": 85,
-                "fn": 57,
-                "precision": 0.7327,
-                "recall": 0.8034,
-                "f1": 0.7664
               }
             }
           },
           "latency": {
-            "p50_ms": 8.98,
-            "p95_ms": 34.64,
-            "p99_ms": 38.28,
-            "mean_ms": 13.84,
+            "p50_ms": 9.19,
+            "p95_ms": 35.1,
+            "p99_ms": 42.28,
+            "mean_ms": 13.96,
             "total_docs": 200,
-            "total_seconds": 2.77,
-            "throughput_docs_per_sec": 72.18
+            "total_seconds": 2.79,
+            "throughput_docs_per_sec": 71.56
           },
           "sample_count": 200
         }
@@ -764,6 +764,38 @@
         "recall": 0.3403,
         "f1": 0.3002,
         "per_type": {
+          "CREDIT_CARD": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 63,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "PERSON": {
+            "tp": 421,
+            "fp": 378,
+            "fn": 198,
+            "precision": 0.5269,
+            "recall": 0.6801,
+            "f1": 0.5938
+          },
+          "EMAIL": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 110,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "SSN": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 67,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
           "LOCATION": {
             "tp": 165,
             "fp": 511,
@@ -780,30 +812,6 @@
             "recall": 0.0,
             "f1": 0.0
           },
-          "EMAIL": {
-            "tp": 0,
-            "fp": 0,
-            "fn": 110,
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
-          },
-          "CREDIT_CARD": {
-            "tp": 0,
-            "fp": 0,
-            "fn": 63,
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
-          },
-          "MRN": {
-            "tp": 0,
-            "fp": 0,
-            "fn": 158,
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
-          },
           "ORGANIZATION": {
             "tp": 79,
             "fp": 923,
@@ -812,21 +820,13 @@
             "recall": 0.345,
             "f1": 0.1284
           },
-          "SSN": {
+          "MRN": {
             "tp": 0,
             "fp": 0,
-            "fn": 67,
+            "fn": 158,
             "precision": 0.0,
             "recall": 0.0,
             "f1": 0.0
-          },
-          "PERSON": {
-            "tp": 421,
-            "fp": 378,
-            "fn": 198,
-            "precision": 0.5269,
-            "recall": 0.6801,
-            "f1": 0.5938
           },
           "NPI": {
             "tp": 0,
@@ -851,6 +851,38 @@
             "recall": 0.5481,
             "f1": 0.5493,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 60,
+                "fp": 11,
+                "fn": 0,
+                "precision": 0.8451,
+                "recall": 1.0,
+                "f1": 0.916
+              },
+              "PERSON": {
+                "tp": 93,
+                "fp": 103,
+                "fn": 75,
+                "precision": 0.4745,
+                "recall": 0.5536,
+                "f1": 0.511
+              },
+              "EMAIL": {
+                "tp": 86,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "SSN": {
+                "tp": 60,
+                "fp": 49,
+                "fn": 0,
+                "precision": 0.5505,
+                "recall": 1.0,
+                "f1": 0.7101
+              },
               "LOCATION": {
                 "tp": 55,
                 "fp": 75,
@@ -867,22 +899,6 @@
                 "recall": 0.4643,
                 "f1": 0.3786
               },
-              "EMAIL": {
-                "tp": 86,
-                "fp": 0,
-                "fn": 0,
-                "precision": 1.0,
-                "recall": 1.0,
-                "f1": 1.0
-              },
-              "CREDIT_CARD": {
-                "tp": 60,
-                "fp": 11,
-                "fn": 0,
-                "precision": 0.8451,
-                "recall": 1.0,
-                "f1": 0.916
-              },
               "MRN": {
                 "tp": 0,
                 "fp": 0,
@@ -890,33 +906,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "SSN": {
-                "tp": 60,
-                "fp": 49,
-                "fn": 0,
-                "precision": 0.5505,
-                "recall": 1.0,
-                "f1": 0.7101
-              },
-              "PERSON": {
-                "tp": 93,
-                "fp": 103,
-                "fn": 75,
-                "precision": 0.4745,
-                "recall": 0.5536,
-                "f1": 0.511
               }
             }
           },
           "latency": {
-            "p50_ms": 12.24,
-            "p95_ms": 21.16,
-            "p99_ms": 24.48,
-            "mean_ms": 13.87,
+            "p50_ms": 12.26,
+            "p95_ms": 21.26,
+            "p99_ms": 24.51,
+            "mean_ms": 13.94,
             "total_docs": 500,
-            "total_seconds": 6.94,
-            "throughput_docs_per_sec": 72.05
+            "total_seconds": 6.98,
+            "throughput_docs_per_sec": 71.68
           },
           "sample_count": 500
         },
@@ -929,6 +929,46 @@
             "recall": 0.4533,
             "f1": 0.3965,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 78,
+                "fp": 97,
+                "fn": 37,
+                "precision": 0.4457,
+                "recall": 0.6783,
+                "f1": 0.5379
+              },
+              "EMAIL": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 16,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "SSN": {
+                "tp": 0,
+                "fp": 12,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
               "LOCATION": {
                 "tp": 45,
                 "fp": 106,
@@ -945,22 +985,6 @@
                 "recall": 0.9286,
                 "f1": 0.4643
               },
-              "EMAIL": {
-                "tp": 0,
-                "fp": 4,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "CREDIT_CARD": {
-                "tp": 0,
-                "fp": 2,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
               "ORGANIZATION": {
                 "tp": 0,
                 "fp": 0,
@@ -968,41 +992,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "SSN": {
-                "tp": 0,
-                "fp": 12,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "NPI": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 16,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 78,
-                "fp": 97,
-                "fn": 37,
-                "precision": 0.4457,
-                "recall": 0.6783,
-                "f1": 0.5379
               }
             }
           },
           "latency": {
-            "p50_ms": 7.18,
-            "p95_ms": 12.42,
-            "p99_ms": 14.92,
-            "mean_ms": 7.96,
+            "p50_ms": 7.4,
+            "p95_ms": 12.85,
+            "p99_ms": 15.17,
+            "mean_ms": 8.16,
             "total_docs": 300,
-            "total_seconds": 2.39,
-            "throughput_docs_per_sec": 125.42
+            "total_seconds": 2.45,
+            "throughput_docs_per_sec": 122.37
           },
           "sample_count": 300
         },
@@ -1015,6 +1015,22 @@
             "recall": 0.365,
             "f1": 0.2664,
             "per_type": {
+              "PERSON": {
+                "tp": 17,
+                "fp": 93,
+                "fn": 29,
+                "precision": 0.1545,
+                "recall": 0.3696,
+                "f1": 0.2179
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
               "LOCATION": {
                 "tp": 50,
                 "fp": 176,
@@ -1046,33 +1062,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "NPI": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 4,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 17,
-                "fp": 93,
-                "fn": 29,
-                "precision": 0.1545,
-                "recall": 0.3696,
-                "f1": 0.2179
               }
             }
           },
           "latency": {
-            "p50_ms": 8.54,
-            "p95_ms": 13.7,
-            "p99_ms": 18.47,
-            "mean_ms": 9.11,
+            "p50_ms": 8.87,
+            "p95_ms": 14.64,
+            "p99_ms": 17.93,
+            "mean_ms": 9.44,
             "total_docs": 200,
-            "total_seconds": 1.82,
-            "throughput_docs_per_sec": 109.67
+            "total_seconds": 1.89,
+            "throughput_docs_per_sec": 105.83
           },
           "sample_count": 200,
           "css": {
@@ -1092,6 +1092,46 @@
             "recall": 0.5237,
             "f1": 0.5227,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "PERSON": {
+                "tp": 233,
+                "fp": 85,
+                "fn": 57,
+                "precision": 0.7327,
+                "recall": 0.8034,
+                "f1": 0.7664
+              },
+              "EMAIL": {
+                "tp": 24,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 79,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "SSN": {
+                "tp": 5,
+                "fp": 10,
+                "fn": 2,
+                "precision": 0.3333,
+                "recall": 0.7143,
+                "f1": 0.4545
+              },
               "LOCATION": {
                 "tp": 15,
                 "fp": 154,
@@ -1108,22 +1148,6 @@
                 "recall": 0.9217,
                 "f1": 0.6503
               },
-              "EMAIL": {
-                "tp": 24,
-                "fp": 0,
-                "fn": 0,
-                "precision": 1.0,
-                "recall": 1.0,
-                "f1": 1.0
-              },
-              "CREDIT_CARD": {
-                "tp": 3,
-                "fp": 0,
-                "fn": 0,
-                "precision": 1.0,
-                "recall": 1.0,
-                "f1": 1.0
-              },
               "ORGANIZATION": {
                 "tp": 0,
                 "fp": 0,
@@ -1139,41 +1163,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "SSN": {
-                "tp": 5,
-                "fp": 10,
-                "fn": 2,
-                "precision": 0.3333,
-                "recall": 0.7143,
-                "f1": 0.4545
-              },
-              "NPI": {
-                "tp": 0,
-                "fp": 0,
-                "fn": 79,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "PERSON": {
-                "tp": 233,
-                "fp": 85,
-                "fn": 57,
-                "precision": 0.7327,
-                "recall": 0.8034,
-                "f1": 0.7664
               }
             }
           },
           "latency": {
-            "p50_ms": 13.96,
-            "p95_ms": 62.26,
-            "p99_ms": 71.03,
-            "mean_ms": 24.34,
+            "p50_ms": 13.79,
+            "p95_ms": 60.92,
+            "p99_ms": 70.38,
+            "mean_ms": 24.42,
             "total_docs": 200,
-            "total_seconds": 4.87,
-            "throughput_docs_per_sec": 41.06
+            "total_seconds": 4.89,
+            "throughput_docs_per_sec": 40.92
           },
           "sample_count": 200
         }
@@ -1186,6 +1186,38 @@
         "recall": 0.5056,
         "f1": 0.4771,
         "per_type": {
+          "CREDIT_CARD": {
+            "tp": 63,
+            "fp": 13,
+            "fn": 0,
+            "precision": 0.8289,
+            "recall": 1.0,
+            "f1": 0.9065
+          },
+          "PERSON": {
+            "tp": 421,
+            "fp": 378,
+            "fn": 198,
+            "precision": 0.5269,
+            "recall": 0.6801,
+            "f1": 0.5938
+          },
+          "EMAIL": {
+            "tp": 110,
+            "fp": 4,
+            "fn": 0,
+            "precision": 0.9649,
+            "recall": 1.0,
+            "f1": 0.9821
+          },
+          "SSN": {
+            "tp": 65,
+            "fp": 71,
+            "fn": 2,
+            "precision": 0.4779,
+            "recall": 0.9701,
+            "f1": 0.6404
+          },
           "LOCATION": {
             "tp": 165,
             "fp": 511,
@@ -1202,22 +1234,6 @@
             "recall": 0.7455,
             "f1": 0.5404
           },
-          "EMAIL": {
-            "tp": 110,
-            "fp": 4,
-            "fn": 0,
-            "precision": 0.9649,
-            "recall": 1.0,
-            "f1": 0.9821
-          },
-          "CREDIT_CARD": {
-            "tp": 63,
-            "fp": 13,
-            "fn": 0,
-            "precision": 0.8289,
-            "recall": 1.0,
-            "f1": 0.9065
-          },
           "MRN": {
             "tp": 0,
             "fp": 0,
@@ -1226,34 +1242,18 @@
             "recall": 0.0,
             "f1": 0.0
           },
-          "SSN": {
-            "tp": 65,
-            "fp": 71,
-            "fn": 2,
-            "precision": 0.4779,
-            "recall": 0.9701,
-            "f1": 0.6404
-          },
-          "PERSON": {
-            "tp": 421,
-            "fp": 378,
-            "fn": 198,
-            "precision": 0.5269,
-            "recall": 0.6801,
-            "f1": 0.5938
+          "NPI": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 99,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           "ORGANIZATION": {
             "tp": 0,
             "fp": 0,
             "fn": 229,
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
-          },
-          "NPI": {
-            "tp": 0,
-            "fp": 0,
-            "fn": 99,
             "precision": 0.0,
             "recall": 0.0,
             "f1": 0.0
@@ -1266,28 +1266,28 @@
       "categories": {
         "standard": {
           "metrics": {
-            "tp": 452,
-            "fp": 504,
-            "fn": 265,
-            "precision": 0.4728,
-            "recall": 0.6304,
-            "f1": 0.5403,
+            "tp": 453,
+            "fp": 480,
+            "fn": 264,
+            "precision": 0.4855,
+            "recall": 0.6318,
+            "f1": 0.5491,
             "per_type": {
-              "LOCATION": {
-                "tp": 45,
-                "fp": 77,
-                "fn": 96,
-                "precision": 0.3689,
-                "recall": 0.3191,
-                "f1": 0.3422
+              "CREDIT_CARD": {
+                "tp": 60,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
               },
-              "PHONE": {
-                "tp": 48,
-                "fp": 13,
-                "fn": 36,
-                "precision": 0.7869,
-                "recall": 0.5714,
-                "f1": 0.6621
+              "PERSON": {
+                "tp": 101,
+                "fp": 108,
+                "fn": 67,
+                "precision": 0.4833,
+                "recall": 0.6012,
+                "f1": 0.5358
               },
               "EMAIL": {
                 "tp": 85,
@@ -1297,21 +1297,29 @@
                 "recall": 0.9884,
                 "f1": 0.9884
               },
-              "CREDIT_CARD": {
-                "tp": 60,
-                "fp": 24,
-                "fn": 0,
-                "precision": 0.7143,
-                "recall": 1.0,
-                "f1": 0.8333
+              "SSN": {
+                "tp": 58,
+                "fp": 10,
+                "fn": 2,
+                "precision": 0.8529,
+                "recall": 0.9667,
+                "f1": 0.9062
               },
-              "MRN": {
-                "tp": 55,
-                "fp": 0,
-                "fn": 63,
-                "precision": 1.0,
-                "recall": 0.4661,
-                "f1": 0.6358
+              "LOCATION": {
+                "tp": 45,
+                "fp": 77,
+                "fn": 96,
+                "precision": 0.3689,
+                "recall": 0.3191,
+                "f1": 0.3422
+              },
+              "PHONE": {
+                "tp": 49,
+                "fp": 13,
+                "fn": 35,
+                "precision": 0.7903,
+                "recall": 0.5833,
+                "f1": 0.6712
               },
               "ORGANIZATION": {
                 "tp": 0,
@@ -1321,32 +1329,24 @@
                 "recall": 0.0,
                 "f1": 0.0
               },
-              "SSN": {
-                "tp": 58,
-                "fp": 10,
-                "fn": 2,
-                "precision": 0.8529,
-                "recall": 0.9667,
-                "f1": 0.9062
-              },
-              "PERSON": {
-                "tp": 101,
-                "fp": 108,
-                "fn": 67,
-                "precision": 0.4833,
-                "recall": 0.6012,
-                "f1": 0.5358
+              "MRN": {
+                "tp": 55,
+                "fp": 0,
+                "fn": 63,
+                "precision": 1.0,
+                "recall": 0.4661,
+                "f1": 0.6358
               }
             }
           },
           "latency": {
-            "p50_ms": 105.7,
-            "p95_ms": 634.87,
-            "p99_ms": 741.14,
-            "mean_ms": 138.82,
+            "p50_ms": 106.8,
+            "p95_ms": 633.62,
+            "p99_ms": 724.3,
+            "mean_ms": 143.66,
             "total_docs": 500,
-            "total_seconds": 393.47,
-            "throughput_docs_per_sec": 1.27
+            "total_seconds": 401.7,
+            "throughput_docs_per_sec": 1.24
           },
           "sample_count": 500
         },
@@ -1359,6 +1359,46 @@
             "recall": 0.5933,
             "f1": 0.4428,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 93,
+                "fp": 89,
+                "fn": 22,
+                "precision": 0.511,
+                "recall": 0.8087,
+                "f1": 0.6263
+              },
+              "EMAIL": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "NPI": {
+                "tp": 4,
+                "fp": 7,
+                "fn": 12,
+                "precision": 0.3636,
+                "recall": 0.25,
+                "f1": 0.2963
+              },
+              "SSN": {
+                "tp": 0,
+                "fp": 9,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
               "LOCATION": {
                 "tp": 60,
                 "fp": 101,
@@ -1375,22 +1415,6 @@
                 "recall": 0.3571,
                 "f1": 0.3226
               },
-              "EMAIL": {
-                "tp": 0,
-                "fp": 4,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "CREDIT_CARD": {
-                "tp": 0,
-                "fp": 2,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
               "ORGANIZATION": {
                 "tp": 16,
                 "fp": 99,
@@ -1406,41 +1430,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "SSN": {
-                "tp": 0,
-                "fp": 9,
-                "fn": 0,
-                "precision": 0.0,
-                "recall": 0.0,
-                "f1": 0.0
-              },
-              "NPI": {
-                "tp": 4,
-                "fp": 7,
-                "fn": 12,
-                "precision": 0.3636,
-                "recall": 0.25,
-                "f1": 0.2963
-              },
-              "PERSON": {
-                "tp": 93,
-                "fp": 89,
-                "fn": 22,
-                "precision": 0.511,
-                "recall": 0.8087,
-                "f1": 0.6263
               }
             }
           },
           "latency": {
-            "p50_ms": 104.4,
-            "p95_ms": 633.57,
-            "p99_ms": 677.3,
-            "mean_ms": 139.76,
+            "p50_ms": 103.6,
+            "p95_ms": 110.38,
+            "p99_ms": 644.28,
+            "mean_ms": 129.83,
             "total_docs": 300,
-            "total_seconds": 247.19,
-            "throughput_docs_per_sec": 1.21
+            "total_seconds": 232.52,
+            "throughput_docs_per_sec": 1.29
           },
           "sample_count": 300
         },
@@ -1453,6 +1453,22 @@
             "recall": 0.49,
             "f1": 0.2882,
             "per_type": {
+              "PERSON": {
+                "tp": 33,
+                "fp": 118,
+                "fn": 13,
+                "precision": 0.2185,
+                "recall": 0.7174,
+                "f1": 0.335
+              },
+              "NPI": {
+                "tp": 3,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
               "LOCATION": {
                 "tp": 47,
                 "fp": 159,
@@ -1484,33 +1500,17 @@
                 "precision": 0.0,
                 "recall": 0.0,
                 "f1": 0.0
-              },
-              "NPI": {
-                "tp": 3,
-                "fp": 1,
-                "fn": 1,
-                "precision": 0.75,
-                "recall": 0.75,
-                "f1": 0.75
-              },
-              "PERSON": {
-                "tp": 33,
-                "fp": 118,
-                "fn": 13,
-                "precision": 0.2185,
-                "recall": 0.7174,
-                "f1": 0.335
               }
             }
           },
           "latency": {
-            "p50_ms": 109.7,
-            "p95_ms": 160.07,
-            "p99_ms": 678.92,
-            "mean_ms": 142.09,
+            "p50_ms": 104.85,
+            "p95_ms": 148.17,
+            "p99_ms": 648.88,
+            "mean_ms": 131.98,
             "total_docs": 200,
-            "total_seconds": 169.54,
-            "throughput_docs_per_sec": 1.18
+            "total_seconds": 155.25,
+            "throughput_docs_per_sec": 1.29
           },
           "sample_count": 200,
           "css": {
@@ -1530,6 +1530,46 @@
             "recall": 0.7734,
             "f1": 0.6298,
             "per_type": {
+              "CREDIT_CARD": {
+                "tp": 3,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.6,
+                "recall": 1.0,
+                "f1": 0.75
+              },
+              "PERSON": {
+                "tp": 237,
+                "fp": 130,
+                "fn": 53,
+                "precision": 0.6458,
+                "recall": 0.8172,
+                "f1": 0.7215
+              },
+              "EMAIL": {
+                "tp": 21,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.9545,
+                "recall": 0.875,
+                "f1": 0.913
+              },
+              "NPI": {
+                "tp": 79,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.9875,
+                "recall": 1.0,
+                "f1": 0.9937
+              },
+              "SSN": {
+                "tp": 5,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.7143,
+                "recall": 0.7143,
+                "f1": 0.7143
+              },
               "LOCATION": {
                 "tp": 38,
                 "fp": 93,
@@ -1546,22 +1586,6 @@
                 "recall": 0.9478,
                 "f1": 0.9397
               },
-              "EMAIL": {
-                "tp": 21,
-                "fp": 1,
-                "fn": 3,
-                "precision": 0.9545,
-                "recall": 0.875,
-                "f1": 0.913
-              },
-              "CREDIT_CARD": {
-                "tp": 3,
-                "fp": 2,
-                "fn": 0,
-                "precision": 0.6,
-                "recall": 1.0,
-                "f1": 0.75
-              },
               "ORGANIZATION": {
                 "tp": 44,
                 "fp": 266,
@@ -1577,68 +1601,44 @@
                 "precision": 1.0,
                 "recall": 0.9189,
                 "f1": 0.9577
-              },
-              "SSN": {
-                "tp": 5,
-                "fp": 2,
-                "fn": 2,
-                "precision": 0.7143,
-                "recall": 0.7143,
-                "f1": 0.7143
-              },
-              "NPI": {
-                "tp": 79,
-                "fp": 1,
-                "fn": 0,
-                "precision": 0.9875,
-                "recall": 1.0,
-                "f1": 0.9937
-              },
-              "PERSON": {
-                "tp": 237,
-                "fp": 130,
-                "fn": 53,
-                "precision": 0.6458,
-                "recall": 0.8172,
-                "f1": 0.7215
               }
             }
           },
           "latency": {
-            "p50_ms": 109.8,
-            "p95_ms": 205.94,
-            "p99_ms": 658.43,
-            "mean_ms": 142.52,
+            "p50_ms": 113.35,
+            "p95_ms": 211.67,
+            "p99_ms": 674.79,
+            "mean_ms": 144.21,
             "total_docs": 200,
-            "total_seconds": 159.58,
-            "throughput_docs_per_sec": 1.25
+            "total_seconds": 158.14,
+            "throughput_docs_per_sec": 1.26
           },
           "sample_count": 200
         }
       },
       "aggregate": {
-        "tp": 1298,
-        "fp": 1715,
-        "fn": 656,
-        "precision": 0.4308,
-        "recall": 0.6643,
-        "f1": 0.5226,
+        "tp": 1299,
+        "fp": 1691,
+        "fn": 655,
+        "precision": 0.4344,
+        "recall": 0.6648,
+        "f1": 0.5255,
         "per_type": {
-          "LOCATION": {
-            "tp": 190,
-            "fp": 430,
-            "fn": 199,
-            "precision": 0.3065,
-            "recall": 0.4884,
-            "f1": 0.3766
+          "CREDIT_CARD": {
+            "tp": 63,
+            "fp": 4,
+            "fn": 0,
+            "precision": 0.9403,
+            "recall": 1.0,
+            "f1": 0.9692
           },
-          "PHONE": {
-            "tp": 168,
-            "fp": 36,
-            "fn": 52,
-            "precision": 0.8235,
-            "recall": 0.7636,
-            "f1": 0.7925
+          "PERSON": {
+            "tp": 464,
+            "fp": 445,
+            "fn": 155,
+            "precision": 0.5105,
+            "recall": 0.7496,
+            "f1": 0.6073
           },
           "EMAIL": {
             "tp": 106,
@@ -1648,21 +1648,29 @@
             "recall": 0.9636,
             "f1": 0.955
           },
-          "CREDIT_CARD": {
+          "SSN": {
             "tp": 63,
-            "fp": 28,
-            "fn": 0,
-            "precision": 0.6923,
-            "recall": 1.0,
-            "f1": 0.8182
+            "fp": 21,
+            "fn": 4,
+            "precision": 0.75,
+            "recall": 0.9403,
+            "f1": 0.8344
           },
-          "MRN": {
-            "tp": 89,
-            "fp": 3,
-            "fn": 69,
-            "precision": 0.9674,
-            "recall": 0.5633,
-            "f1": 0.712
+          "LOCATION": {
+            "tp": 190,
+            "fp": 430,
+            "fn": 199,
+            "precision": 0.3065,
+            "recall": 0.4884,
+            "f1": 0.3766
+          },
+          "PHONE": {
+            "tp": 169,
+            "fp": 36,
+            "fn": 51,
+            "precision": 0.8244,
+            "recall": 0.7682,
+            "f1": 0.7953
           },
           "ORGANIZATION": {
             "tp": 69,
@@ -1672,21 +1680,13 @@
             "recall": 0.3013,
             "f1": 0.1333
           },
-          "SSN": {
-            "tp": 63,
-            "fp": 21,
-            "fn": 4,
-            "precision": 0.75,
-            "recall": 0.9403,
-            "f1": 0.8344
-          },
-          "PERSON": {
-            "tp": 464,
-            "fp": 445,
-            "fn": 155,
-            "precision": 0.5105,
-            "recall": 0.7496,
-            "f1": 0.6073
+          "MRN": {
+            "tp": 89,
+            "fp": 3,
+            "fn": 69,
+            "precision": 0.9674,
+            "recall": 0.5633,
+            "f1": 0.712
           },
           "NPI": {
             "tp": 86,
