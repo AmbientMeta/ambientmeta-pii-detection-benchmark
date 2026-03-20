@@ -39,19 +39,29 @@ ALL_ADAPTERS: dict[str, type[PIIDetectorAdapter]] = {
 }
 
 
-def load_dataset(category: str) -> list[dict]:
-    """Load JSONL dataset for a category."""
+def load_dataset(category: str) -> tuple[list[dict], set[str]]:
+    """Load JSONL dataset and scored entity types for a category."""
     jsonl_files = list((DATA_DIR / category).glob("*.jsonl"))
     if not jsonl_files:
         console.print(f"[yellow]Warning: No .jsonl files in data/{category}/[/yellow]")
-        return []
+        return [], set()
 
     samples = []
     for f in jsonl_files:
         for line in f.read_text().strip().splitlines():
             if line.strip():
                 samples.append(json.loads(line))
-    return samples
+
+    # Load scored_entity_types from metadata.json — only these types are
+    # annotated in this category. Detections of other types are NOT counted
+    # as false positives (the dataset simply doesn't annotate them).
+    scored_types: set[str] = set()
+    meta_path = DATA_DIR / category / "metadata.json"
+    if meta_path.exists():
+        meta = json.loads(meta_path.read_text())
+        scored_types = set(meta.get("scored_entity_types", []))
+
+    return samples, scored_types
 
 
 def build_context_pairs(samples: list[dict]) -> list[dict]:
@@ -80,8 +90,14 @@ def file_sha256(path: Path) -> str:
 def run_adapter_on_category(
     adapter: PIIDetectorAdapter,
     samples: list[dict],
+    scored_types: set[str] | None = None,
 ) -> tuple[SpanMetrics, dict[str, list[DetectedEntity]], LatencyTracker]:
-    """Run an adapter on all samples in a category, return metrics + raw detections."""
+    """Run an adapter on all samples in a category, return metrics + raw detections.
+
+    If scored_types is provided, detections of entity types NOT in the set are
+    excluded from metrics (they are not false positives — the dataset simply
+    doesn't annotate those types in this category).
+    """
     tracker = LatencyTracker()
     all_predictions: list[DetectedEntity] = []
     all_ground_truth: list[GroundTruthSpan] = []
@@ -129,6 +145,12 @@ def run_adapter_on_category(
         offset += len(text) + 1000  # large gap between samples
 
     tracker.end_session()
+
+    # Filter predictions to only scored entity types — detections of types
+    # not annotated in this category are excluded (not false positives).
+    if scored_types:
+        all_predictions = [p for p in all_predictions if p.entity_type in scored_types]
+
     metrics = compute_span_metrics(all_predictions, all_ground_truth)
     return metrics, detections_by_id, tracker
 
@@ -153,11 +175,15 @@ def run_benchmark(
         )
         adapter_names = [a for a in adapter_names if a != "ambientmeta"]
 
-    # Load datasets
+    # Load datasets + scored entity types per category
     datasets: dict[str, list[dict]] = {}
+    scored_types_by_cat: dict[str, set[str]] = {}
     for cat in category_names:
-        datasets[cat] = load_dataset(cat)
-        console.print(f"Loaded {len(datasets[cat])} samples for [bold]{cat}[/bold]")
+        samples, scored_types = load_dataset(cat)
+        datasets[cat] = samples
+        scored_types_by_cat[cat] = scored_types
+        types_note = f" (scoring: {', '.join(sorted(scored_types))})" if scored_types else ""
+        console.print(f"Loaded {len(samples)} samples for [bold]{cat}[/bold]{types_note}")
 
     if not any(datasets.values()):
         console.print("[red]No dataset samples found. Add .jsonl files to data/ directories.[/red]")
@@ -200,7 +226,10 @@ def run_benchmark(
                 continue
 
             console.print(f"  Category: {cat} ({len(samples)} samples)...", end=" ")
-            metrics, detections_by_id, tracker = run_adapter_on_category(adapter, samples)
+            scored_types = scored_types_by_cat.get(cat)
+            metrics, detections_by_id, tracker = run_adapter_on_category(
+                adapter, samples, scored_types=scored_types,
+            )
             latency = tracker.compute()
 
             cat_result = {

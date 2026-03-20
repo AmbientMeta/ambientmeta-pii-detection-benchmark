@@ -2,7 +2,30 @@
   "category": "adversarial",
   "description": "Edge cases and adversarial inputs: international formats, obfuscated PII, code blocks, partial redactions, conversational PII.",
   "target_count": 200,
-  "entity_types": ["PERSON", "EMAIL", "PHONE", "SSN", "CREDIT_CARD", "LOCATION"],
+  "entity_types": [
+    "PERSON",
+    "EMAIL",
+    "PHONE",
+    "SSN",
+    "CREDIT_CARD",
+    "LOCATION"
+  ],
   "difficulty": "adversarial",
-  "sources": ["synthetic", "wikiann", "gretel_finance", "wnut17"]
+  "sources": [
+    "synthetic",
+    "wikiann",
+    "gretel_finance",
+    "wnut17"
+  ],
+  "scored_entity_types": [
+    "CREDIT_CARD",
+    "EMAIL",
+    "LOCATION",
+    "MRN",
+    "NPI",
+    "ORGANIZATION",
+    "PERSON",
+    "PHONE",
+    "SSN"
+  ]
 }

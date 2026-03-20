@@ -10,26 +10,26 @@
 
 | System | Overall F1 | Standard F1 | Ambiguous F1 | CSS | Adversarial F1 |
 |--------|:---------:|:-----------:|:------------:|:---:|:--------------:|
-| **AmbientMeta Privacy Guard** | **52.5%** | **54.9%** | **44.3%** | **50.5%** | **63.0%** |
-| Microsoft Presidio | 47.7% | **54.9%** | 39.6% | 37.0% | 52.3% |
-| spaCy NER | 30.0% | 21.3% | 37.2% | 40.5% | 37.3% |
-| Regex Only | 28.7% | 41.8% | 6.8% | 3.0% | 28.5% |
+| **AmbientMeta Privacy Guard** | **56.3%** | **65.7%** | **47.9%** | **51.0%** | **63.0%** |
+| Microsoft Presidio | 47.9% | 54.9% | 40.8% | 37.0% | 52.3% |
+| spaCy NER | 32.6% | 28.4% | 37.2% | 40.5% | 37.3% |
+| Regex Only | 28.8% | 41.8% | 7.0% | 3.0% | 28.5% |
 
-> **Headline:** AmbientMeta leads with **52.5% overall F1** — 5 points ahead of Presidio. Context Sensitivity Score is **50.5%** — 13 points ahead of Presidio (37.0%) and 10 points ahead of spaCy NER (40.5%). AmbientMeta is the only system that detects healthcare entities (NPI: 88.7%, MRN: 71.2%).
+> **Headline:** AmbientMeta leads with **56.3% overall F1** — 8 points ahead of Presidio. Context Sensitivity Score is **51.0%** — 14 points ahead of Presidio (37.0%) and 10 points ahead of spaCy NER (40.5%). AmbientMeta is the only system that detects healthcare entities (NPI: 95.7%, MRN: 72.1%).
 
 ### Per-Entity F1
 
 | Entity Type | AmbientMeta | Presidio | spaCy NER | Regex |
 |-------------|:-----------:|:--------:|:---------:|:-----:|
-| PERSON | **60.7%** | 59.4% | 59.4% | 0.0% |
-| EMAIL | 95.5% | **98.2%** | 0.0% | 95.0% |
-| PHONE | **79.2%** | 54.0% | 0.0% | 55.5% |
-| SSN | **83.4%** | 64.0% | 0.0% | 76.0% |
-| CREDIT_CARD | **96.9%** | 90.6% | 0.0% | 84.3% |
+| PERSON | **60.8%** | 59.4% | 59.4% | 0.0% |
+| EMAIL | 97.2% | **100.0%** | 0.0% | 96.3% |
+| PHONE | **80.7%** | 54.2% | 0.0% | 55.4% |
+| SSN | **88.7%** | 68.1% | 0.0% | 81.0% |
+| CREDIT_CARD | **98.4%** | 92.0% | 0.0% | 85.7% |
 | LOCATION | **37.7%** | 31.0% | 31.0% | 0.0% |
-| NPI | **88.7%** | 0.0% | 0.0% | 0.0% |
-| MRN | **71.2%** | 0.0% | 0.0% | 0.0% |
-| ORGANIZATION | **13.3%** | 0.0% | 12.9% | 0.0% |
+| NPI | **95.7%** | 0.0% | 0.0% | 0.0% |
+| MRN | **72.1%** | 0.0% | 0.0% | 0.0% |
+| ORGANIZATION | **18.1%** | 0.0% | 17.9% | 0.0% |
 
 AmbientMeta is the **only system that detects NPI and MRN** — critical entity types for healthcare privacy compliance (HIPAA).
 
