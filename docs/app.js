@@ -23,17 +23,17 @@ Chart.defaults.font.family = CHART_DEFAULTS.font.family;
 // Embedded results data
 const LAT = {
     regex:       { p50_ms: 0.04, p95_ms: 0.1, p99_ms: 0.1, total_docs: 1200, total_seconds: 0.06, throughput_docs_per_sec: 20000 },
-    spacy:       { p50_ms: 5.6, p95_ms: 13.1, p99_ms: 15.6, total_docs: 1200, total_seconds: 7.9, throughput_docs_per_sec: 152 },
-    presidio:    { p50_ms: 9.7, p95_ms: 25.6, p99_ms: 29.7, total_docs: 1200, total_seconds: 14.1, throughput_docs_per_sec: 85 },
-    ambientmeta: { p50_ms: 14.2, p95_ms: 22.8, p99_ms: 31.5, total_docs: 1200, total_seconds: 19.2, throughput_docs_per_sec: 62.5 },
+    spacy:       { p50_ms: 5.9, p95_ms: 13.2, p99_ms: 15.5, total_docs: 1200, total_seconds: 8.2, throughput_docs_per_sec: 147 },
+    presidio:    { p50_ms: 9.8, p95_ms: 26.1, p99_ms: 31.3, total_docs: 1200, total_seconds: 15.3, throughput_docs_per_sec: 79 },
+    ambientmeta: { p50_ms: 106.9, p95_ms: 411.1, p99_ms: 679.3, total_docs: 1200, total_seconds: 168.0, throughput_docs_per_sec: 7.1 },
 };
 
 const FALLBACK_DATA = {
     adapters: {
-        regex:       { name: 'Regex Only',                aggregate: { f1: 0.244, per_type: {"PERSON":{"f1":0.0},"CREDIT_CARD":{"f1":0.4091},"LOCATION":{"f1":0.0},"EMAIL":{"f1":0.9498},"SSN":{"f1":0.4466},"PHONE":{"f1":0.5331},"MRN":{"f1":0.0},"ORGANIZATION":{"f1":0.0},"NPI":{"f1":0.0}} }, categories: { standard: { metrics: { f1: 0.314 }, latency: LAT.regex }, ambiguous: { metrics: { f1: 0.068 }, latency: LAT.regex }, contextual: { metrics: { f1: 0.057 }, css: { css: 0.030 }, latency: LAT.regex }, adversarial: { metrics: { f1: 0.280 }, latency: LAT.regex } } },
-        spacy:       { name: 'spaCy NER',                 aggregate: { f1: 0.300, per_type: {"PERSON":{"f1":0.5938},"CREDIT_CARD":{"f1":0.0},"LOCATION":{"f1":0.3099},"EMAIL":{"f1":0.0},"ORGANIZATION":{"f1":0.1286},"SSN":{"f1":0.0},"PHONE":{"f1":0.0},"MRN":{"f1":0.0},"NPI":{"f1":0.0}} }, categories: { standard: { metrics: { f1: 0.213 }, latency: LAT.spacy }, ambiguous: { metrics: { f1: 0.372 }, latency: LAT.spacy }, contextual: { metrics: { f1: 0.227 }, css: { css: 0.405 }, latency: LAT.spacy }, adversarial: { metrics: { f1: 0.373 }, latency: LAT.spacy } } },
-        presidio:    { name: 'Microsoft Presidio',        aggregate: { f1: 0.443, per_type: {"PERSON":{"f1":0.5938},"CREDIT_CARD":{"f1":0.1},"LOCATION":{"f1":0.3099},"EMAIL":{"f1":0.9821},"SSN":{"f1":0.4407},"PHONE":{"f1":0.5256},"MRN":{"f1":0.0},"ORGANIZATION":{"f1":0.0},"NPI":{"f1":0.0}} }, categories: { standard: { metrics: { f1: 0.458 }, latency: LAT.presidio }, ambiguous: { metrics: { f1: 0.396 }, latency: LAT.presidio }, contextual: { metrics: { f1: 0.266 }, css: { css: 0.370 }, latency: LAT.presidio }, adversarial: { metrics: { f1: 0.517 }, latency: LAT.presidio } } },
-        ambientmeta: { name: 'AmbientMeta Privacy Guard', aggregate: { f1: 0.443, per_type: {"PERSON":{"f1":0.6089},"CREDIT_CARD":{"f1":0.1429},"LOCATION":{"f1":0.3759},"EMAIL":{"f1":0.955},"ORGANIZATION":{"f1":0.1342},"SSN":{"f1":0.5593},"PHONE":{"f1":0.7578},"MRN":{"f1":0.0},"NPI":{"f1":0.0777}} }, categories: { standard: { metrics: { f1: 0.405 }, latency: LAT.ambientmeta }, ambiguous: { metrics: { f1: 0.444 }, latency: LAT.ambientmeta }, contextual: { metrics: { f1: 0.286 }, css: { css: 0.500 }, latency: LAT.ambientmeta }, adversarial: { metrics: { f1: 0.540 }, latency: LAT.ambientmeta } } },
+        regex:       { name: 'Regex Only',                aggregate: { f1: 0.280, per_type: {"PERSON":{"f1":0.0},"CREDIT_CARD":{"f1":0.7273},"LOCATION":{"f1":0.0},"EMAIL":{"f1":0.9498},"SSN":{"f1":0.7597},"PHONE":{"f1":0.5552},"MRN":{"f1":0.0},"ORGANIZATION":{"f1":0.0},"NPI":{"f1":0.0}} }, categories: { standard: { metrics: { f1: 0.400 }, latency: LAT.regex }, ambiguous: { metrics: { f1: 0.068 }, latency: LAT.regex }, contextual: { metrics: { f1: 0.057 }, css: { css: 0.030 }, latency: LAT.regex }, adversarial: { metrics: { f1: 0.285 }, latency: LAT.regex } } },
+        spacy:       { name: 'spaCy NER',                 aggregate: { f1: 0.300, per_type: {"PERSON":{"f1":0.5942},"CREDIT_CARD":{"f1":0.0},"LOCATION":{"f1":0.3099},"EMAIL":{"f1":0.0},"ORGANIZATION":{"f1":0.1286},"SSN":{"f1":0.0},"PHONE":{"f1":0.0},"MRN":{"f1":0.0},"NPI":{"f1":0.0}} }, categories: { standard: { metrics: { f1: 0.213 }, latency: LAT.spacy }, ambiguous: { metrics: { f1: 0.372 }, latency: LAT.spacy }, contextual: { metrics: { f1: 0.227 }, css: { css: 0.405 }, latency: LAT.spacy }, adversarial: { metrics: { f1: 0.373 }, latency: LAT.spacy } } },
+        presidio:    { name: 'Microsoft Presidio',        aggregate: { f1: 0.457, per_type: {"PERSON":{"f1":0.5942},"CREDIT_CARD":{"f1":0.2326},"LOCATION":{"f1":0.3099},"EMAIL":{"f1":0.9821},"SSN":{"f1":0.6404},"PHONE":{"f1":0.5386},"MRN":{"f1":0.0},"ORGANIZATION":{"f1":0.0},"NPI":{"f1":0.0}} }, categories: { standard: { metrics: { f1: 0.497 }, latency: LAT.presidio }, ambiguous: { metrics: { f1: 0.396 }, latency: LAT.presidio }, contextual: { metrics: { f1: 0.266 }, css: { css: 0.370 }, latency: LAT.presidio }, adversarial: { metrics: { f1: 0.519 }, latency: LAT.presidio } } },
+        ambientmeta: { name: 'AmbientMeta Privacy Guard', aggregate: { f1: 0.507, per_type: {"PERSON":{"f1":0.6077},"CREDIT_CARD":{"f1":0.233},"LOCATION":{"f1":0.3766},"EMAIL":{"f1":0.955},"ORGANIZATION":{"f1":0.1333},"SSN":{"f1":0.8344},"PHONE":{"f1":0.7925},"MRN":{"f1":0.712},"NPI":{"f1":0.8866}} }, categories: { standard: { metrics: { f1: 0.496 }, latency: LAT.ambientmeta }, ambiguous: { metrics: { f1: 0.443 }, latency: LAT.ambientmeta }, contextual: { metrics: { f1: 0.288 }, css: { css: 0.505 }, latency: LAT.ambientmeta }, adversarial: { metrics: { f1: 0.629 }, latency: LAT.ambientmeta } } },
     }
 };
 
@@ -353,12 +353,17 @@ function renderLatencyTable(data) {
 function init() {
     const data = loadResults();
 
-    renderResultsTable(data);
-    renderOverallChart(data);
-    renderCSSChart(data);
-    renderEntityChart(data);
-    renderRadarChart(data);
-    renderLatencyTable(data);
+    const renders = [
+        ['resultsTable', () => renderResultsTable(data)],
+        ['overallChart', () => renderOverallChart(data)],
+        ['cssChart', () => renderCSSChart(data)],
+        ['entityChart', () => renderEntityChart(data)],
+        ['radarChart', () => renderRadarChart(data)],
+        ['latencyTable', () => renderLatencyTable(data)],
+    ];
+    for (const [name, fn] of renders) {
+        try { fn(); } catch (e) { console.error(`Failed to render ${name}:`, e); }
+    }
 
     // Update hero stats
     const adapters = getOrderedAdapters(data);

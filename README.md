@@ -10,38 +10,39 @@
 
 | System | Overall F1 | Standard F1 | Ambiguous F1 | CSS | Adversarial F1 |
 |--------|:---------:|:-----------:|:------------:|:---:|:--------------:|
-| **AmbientMeta Privacy Guard** | **44.3%** | 40.5% | **44.4%** | **50.0%** | **54.0%** |
-| Microsoft Presidio | **44.3%** | **45.8%** | 39.6% | 37.0% | 51.7% |
+| **AmbientMeta Privacy Guard** | **50.7%** | 49.6% | **44.3%** | **50.5%** | **62.9%** |
+| Microsoft Presidio | 45.7% | **49.7%** | 39.6% | 37.0% | 51.9% |
 | spaCy NER | 30.0% | 21.3% | 37.2% | 40.5% | 37.3% |
-| Regex Only | 24.4% | 31.4% | 6.8% | 3.0% | 28.0% |
+| Regex Only | 28.0% | 40.0% | 6.8% | 3.0% | 28.5% |
 
-> **Headline:** AmbientMeta's Context Sensitivity Score is **50.0%** — 13 points ahead of Presidio (37.0%) and 10 points ahead of spaCy NER (40.5%). Regex scores 3.0% because it literally cannot vary by context.
+> **Headline:** AmbientMeta leads with **50.7% overall F1** — 5 points ahead of Presidio. Context Sensitivity Score is **50.5%** — 13 points ahead of Presidio (37.0%) and 10 points ahead of spaCy NER (40.5%). AmbientMeta is the only system that detects healthcare entities (NPI: 88.7%, MRN: 71.2%).
 
 ### Per-Entity F1
 
 | Entity Type | AmbientMeta | Presidio | spaCy NER | Regex |
 |-------------|:-----------:|:--------:|:---------:|:-----:|
-| PERSON | **60.9%** | 59.4% | 59.4% | 0.0% |
+| PERSON | **60.8%** | 59.4% | 59.4% | 0.0% |
 | EMAIL | 95.5% | **98.2%** | 0.0% | 95.0% |
-| PHONE | **75.8%** | 52.6% | 0.0% | 53.3% |
-| SSN | **55.9%** | 44.1% | 0.0% | 44.7% |
-| CREDIT_CARD | 14.3% | 10.0% | 0.0% | **40.9%** |
-| LOCATION | **37.6%** | 31.0% | 31.0% | 0.0% |
-| NPI | **7.8%** | 0.0% | 0.0% | 0.0% |
-| ORGANIZATION | **13.4%** | 0.0% | 12.9% | 0.0% |
+| PHONE | **79.2%** | 53.9% | 0.0% | 55.5% |
+| SSN | **83.4%** | 64.0% | 0.0% | 76.0% |
+| CREDIT_CARD | 23.3% | 23.3% | 0.0% | **72.7%** |
+| LOCATION | **37.7%** | 31.0% | 31.0% | 0.0% |
+| NPI | **88.7%** | 0.0% | 0.0% | 0.0% |
+| MRN | **71.2%** | 0.0% | 0.0% | 0.0% |
+| ORGANIZATION | **13.3%** | 0.0% | 12.9% | 0.0% |
 
-AmbientMeta is the **only system that detects NPI** (National Provider Identifiers) — a critical entity type for healthcare privacy compliance.
+AmbientMeta is the **only system that detects NPI and MRN** — critical entity types for healthcare privacy compliance (HIPAA).
 
 ### Latency (Server-Side Processing)
 
 | System | p50 | p95 | p99 |
 |--------|:---:|:---:|:---:|
 | Regex Only | <1ms | <1ms | <1ms |
-| spaCy NER | 5.6ms | 13.1ms | 15.6ms |
-| Microsoft Presidio | 9.7ms | 25.6ms | 29.7ms |
-| AmbientMeta | 14.2ms | 22.8ms | 31.5ms |
+| spaCy NER | 5.9ms | 13.2ms | 15.5ms |
+| Microsoft Presidio | 9.8ms | 26.1ms | 31.3ms |
+| AmbientMeta | 107ms | 411ms | 679ms |
 
-> AmbientMeta latency reflects server-side `processing_ms` (actual detection time), not network round-trip. All systems are within production-viable bounds.
+> AmbientMeta latency reflects server-side `processing_ms` (actual detection time), not network round-trip. Higher latency reflects multi-tier detection architecture (regex + NER + compiled rules).
 
 ---
 
