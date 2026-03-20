@@ -25,7 +25,7 @@ const LAT = {
     regex:       { p50_ms: 0.04, p95_ms: 0.1, p99_ms: 0.1, total_docs: 1113, total_seconds: 0.05, throughput_docs_per_sec: 22260 },
     spacy:       { p50_ms: 5.7, p95_ms: 13.0, p99_ms: 15.2, total_docs: 1113, total_seconds: 7.6, throughput_docs_per_sec: 147 },
     presidio:    { p50_ms: 9.5, p95_ms: 24.7, p99_ms: 31.1, total_docs: 1113, total_seconds: 13.7, throughput_docs_per_sec: 81 },
-    ambientmeta: { p50_ms: 15.1, p95_ms: 30.2, p99_ms: 497.5, total_docs: 1113, total_seconds: 259.0, throughput_docs_per_sec: 4.3 },
+    ambientmeta: { p50_ms: 14.3, p95_ms: 42.2, p99_ms: 60.6, total_docs: 1113, total_seconds: 340.7, throughput_docs_per_sec: 3.3 },
 };
 
 const FALLBACK_DATA = {
