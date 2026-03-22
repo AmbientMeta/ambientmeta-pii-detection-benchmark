@@ -1,0 +1,1607 @@
+{
+  "metadata": {
+    "timestamp": "2026-03-20T04:20:15.712929+00:00",
+    "python_version": "3.13.0 (v3.13.0:60403a5409f, Oct  7 2024, 00:37:40) [Clang 15.0.0 (clang-1500.3.9.4)]",
+    "platform": "macOS-15.7.3-x86_64-i386-64bit-Mach-O",
+    "dataset_hashes": {
+      "standard/standard_entities.jsonl": "d8729fd05a35b263cec9887b4a7e8dfa3bacfcf6f822e144b7f654c1c2ad2632",
+      "ambiguous/ambiguous_spans.jsonl": "b8162cf9a54a51db352379dff583f3e1b6b8086402b4875cf8fc07463ed9607f",
+      "contextual/contextual_detection.jsonl": "4c9279e0e9dd2812e16f7fd02c8e578953b29120bc111efe01a425e3d1825f26",
+      "adversarial/adversarial_cases.jsonl": "988e13d7837b67b596e0efcd8afb4789c4ca23f361d40b9c480e9a31b6ecdf45"
+    }
+  },
+  "adapters": {
+    "regex": {
+      "name": "Regex Only",
+      "categories": {
+        "standard": {
+          "metrics": {
+            "tp": 205,
+            "fp": 59,
+            "fn": 512,
+            "precision": 0.7765,
+            "recall": 0.2859,
+            "f1": 0.4179,
+            "per_type": {
+              "CREDIT_CARD": {
+                "tp": 48,
+                "fp": 5,
+                "fn": 12,
+                "precision": 0.9057,
+                "recall": 0.8,
+                "f1": 0.8496
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 118,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 168,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PHONE": {
+                "tp": 32,
+                "fp": 49,
+                "fn": 52,
+                "precision": 0.3951,
+                "recall": 0.381,
+                "f1": 0.3879
+              },
+              "EMAIL": {
+                "tp": 81,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.9878,
+                "recall": 0.9419,
+                "f1": 0.9643
+              },
+              "SSN": {
+                "tp": 44,
+                "fp": 4,
+                "fn": 16,
+                "precision": 0.9167,
+                "recall": 0.7333,
+                "f1": 0.8148
+              },
+              "LOCATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 141,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 0.04,
+            "p95_ms": 0.07,
+            "p99_ms": 0.09,
+            "mean_ms": 0.04,
+            "total_docs": 500,
+            "total_seconds": 0.02,
+            "throughput_docs_per_sec": 22035.72
+          },
+          "sample_count": 500
+        },
+        "ambiguous": {
+          "metrics": {
+            "tp": 12,
+            "fp": 29,
+            "fn": 288,
+            "precision": 0.2927,
+            "recall": 0.04,
+            "f1": 0.0704,
+            "per_type": {
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 16,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 119,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PHONE": {
+                "tp": 12,
+                "fp": 29,
+                "fn": 2,
+                "precision": 0.2927,
+                "recall": 0.8571,
+                "f1": 0.4364
+              },
+              "ORGANIZATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 71,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "LOCATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 80,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 0.02,
+            "p95_ms": 0.04,
+            "p99_ms": 0.05,
+            "mean_ms": 0.02,
+            "total_docs": 300,
+            "total_seconds": 0.01,
+            "throughput_docs_per_sec": 41215.38
+          },
+          "sample_count": 300
+        },
+        "contextual": {
+          "metrics": {
+            "tp": 6,
+            "fp": 6,
+            "fn": 182,
+            "precision": 0.5,
+            "recall": 0.0319,
+            "f1": 0.06,
+            "per_type": {
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 46,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PHONE": {
+                "tp": 6,
+                "fp": 6,
+                "fn": 1,
+                "precision": 0.5,
+                "recall": 0.8571,
+                "f1": 0.6316
+              },
+              "ORGANIZATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 49,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "LOCATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 79,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 0.02,
+            "p95_ms": 0.05,
+            "p99_ms": 0.06,
+            "mean_ms": 0.02,
+            "total_docs": 188,
+            "total_seconds": 0.01,
+            "throughput_docs_per_sec": 35931.55
+          },
+          "sample_count": 188,
+          "css": {
+            "css": 0.0319,
+            "total_pairs": 94,
+            "correct": 0,
+            "partial": 6,
+            "incorrect": 88
+          }
+        },
+        "adversarial": {
+          "metrics": {
+            "tp": 142,
+            "fp": 118,
+            "fn": 593,
+            "precision": 0.5462,
+            "recall": 0.1932,
+            "f1": 0.2854,
+            "per_type": {
+              "CREDIT_CARD": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 79,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "LOCATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 88,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 37,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 290,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "ORGANIZATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 92,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "EMAIL": {
+                "tp": 23,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.9583,
+                "recall": 0.9583,
+                "f1": 0.9583
+              },
+              "SSN": {
+                "tp": 5,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.8333,
+                "recall": 0.7143,
+                "f1": 0.7692
+              },
+              "PHONE": {
+                "tp": 111,
+                "fp": 116,
+                "fn": 4,
+                "precision": 0.489,
+                "recall": 0.9652,
+                "f1": 0.6491
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 0.04,
+            "p95_ms": 0.3,
+            "p99_ms": 0.35,
+            "mean_ms": 0.09,
+            "total_docs": 200,
+            "total_seconds": 0.02,
+            "throughput_docs_per_sec": 10375.42
+          },
+          "sample_count": 200
+        }
+      },
+      "aggregate": {
+        "tp": 365,
+        "fp": 212,
+        "fn": 1575,
+        "precision": 0.6326,
+        "recall": 0.1881,
+        "f1": 0.29,
+        "per_type": {
+          "CREDIT_CARD": {
+            "tp": 51,
+            "fp": 5,
+            "fn": 12,
+            "precision": 0.9107,
+            "recall": 0.8095,
+            "f1": 0.8571
+          },
+          "MRN": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 158,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "PERSON": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 623,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "PHONE": {
+            "tp": 161,
+            "fp": 200,
+            "fn": 59,
+            "precision": 0.446,
+            "recall": 0.7318,
+            "f1": 0.5542
+          },
+          "EMAIL": {
+            "tp": 104,
+            "fp": 2,
+            "fn": 6,
+            "precision": 0.9811,
+            "recall": 0.9455,
+            "f1": 0.963
+          },
+          "SSN": {
+            "tp": 49,
+            "fp": 5,
+            "fn": 18,
+            "precision": 0.9074,
+            "recall": 0.7313,
+            "f1": 0.8099
+          },
+          "LOCATION": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 388,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "NPI": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 99,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "ORGANIZATION": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 212,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        }
+      }
+    },
+    "spacy": {
+      "name": "spaCy NER",
+      "categories": {
+        "standard": {
+          "metrics": {
+            "tp": 148,
+            "fp": 178,
+            "fn": 569,
+            "precision": 0.454,
+            "recall": 0.2064,
+            "f1": 0.2838,
+            "per_type": {
+              "CREDIT_CARD": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 60,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 118,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 93,
+                "fp": 103,
+                "fn": 75,
+                "precision": 0.4745,
+                "recall": 0.5536,
+                "f1": 0.511
+              },
+              "PHONE": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 84,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "EMAIL": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 86,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "SSN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 60,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "LOCATION": {
+                "tp": 55,
+                "fp": 75,
+                "fn": 86,
+                "precision": 0.4231,
+                "recall": 0.3901,
+                "f1": 0.4059
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 7.27,
+            "p95_ms": 11.43,
+            "p99_ms": 14.73,
+            "mean_ms": 7.73,
+            "total_docs": 500,
+            "total_seconds": 3.87,
+            "throughput_docs_per_sec": 129.16
+          },
+          "sample_count": 500
+        },
+        "ambiguous": {
+          "metrics": {
+            "tp": 150,
+            "fp": 319,
+            "fn": 150,
+            "precision": 0.3198,
+            "recall": 0.5,
+            "f1": 0.3901,
+            "per_type": {
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 16,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 83,
+                "fp": 92,
+                "fn": 36,
+                "precision": 0.4743,
+                "recall": 0.6975,
+                "f1": 0.5646
+              },
+              "PHONE": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 14,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "ORGANIZATION": {
+                "tp": 21,
+                "fp": 122,
+                "fn": 50,
+                "precision": 0.1469,
+                "recall": 0.2958,
+                "f1": 0.1963
+              },
+              "LOCATION": {
+                "tp": 46,
+                "fp": 105,
+                "fn": 34,
+                "precision": 0.3046,
+                "recall": 0.575,
+                "f1": 0.3983
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 5.61,
+            "p95_ms": 9.18,
+            "p99_ms": 12.04,
+            "mean_ms": 6.07,
+            "total_docs": 300,
+            "total_seconds": 1.83,
+            "throughput_docs_per_sec": 164.29
+          },
+          "sample_count": 300
+        },
+        "contextual": {
+          "metrics": {
+            "tp": 82,
+            "fp": 375,
+            "fn": 106,
+            "precision": 0.1794,
+            "recall": 0.4362,
+            "f1": 0.2543,
+            "per_type": {
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 17,
+                "fp": 86,
+                "fn": 29,
+                "precision": 0.165,
+                "recall": 0.3696,
+                "f1": 0.2282
+              },
+              "PHONE": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 7,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "ORGANIZATION": {
+                "tp": 11,
+                "fp": 130,
+                "fn": 38,
+                "precision": 0.078,
+                "recall": 0.2245,
+                "f1": 0.1158
+              },
+              "LOCATION": {
+                "tp": 54,
+                "fp": 159,
+                "fn": 25,
+                "precision": 0.2535,
+                "recall": 0.6835,
+                "f1": 0.3699
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 5.5,
+            "p95_ms": 8.0,
+            "p99_ms": 10.52,
+            "mean_ms": 5.87,
+            "total_docs": 188,
+            "total_seconds": 1.11,
+            "throughput_docs_per_sec": 169.97
+          },
+          "sample_count": 188,
+          "css": {
+            "css": 0.4521,
+            "total_pairs": 94,
+            "correct": 14,
+            "partial": 57,
+            "incorrect": 23
+          }
+        },
+        "adversarial": {
+          "metrics": {
+            "tp": 296,
+            "fp": 553,
+            "fn": 439,
+            "precision": 0.3486,
+            "recall": 0.4027,
+            "f1": 0.3737,
+            "per_type": {
+              "CREDIT_CARD": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 79,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "LOCATION": {
+                "tp": 15,
+                "fp": 154,
+                "fn": 73,
+                "precision": 0.0888,
+                "recall": 0.1705,
+                "f1": 0.1167
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 37,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 233,
+                "fp": 85,
+                "fn": 57,
+                "precision": 0.7327,
+                "recall": 0.8034,
+                "f1": 0.7664
+              },
+              "ORGANIZATION": {
+                "tp": 48,
+                "fp": 314,
+                "fn": 44,
+                "precision": 0.1326,
+                "recall": 0.5217,
+                "f1": 0.2115
+              },
+              "EMAIL": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 24,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "SSN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 7,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PHONE": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 115,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 9.17,
+            "p95_ms": 33.47,
+            "p99_ms": 39.22,
+            "mean_ms": 13.72,
+            "total_docs": 200,
+            "total_seconds": 2.75,
+            "throughput_docs_per_sec": 72.81
+          },
+          "sample_count": 200
+        }
+      },
+      "aggregate": {
+        "tp": 676,
+        "fp": 1425,
+        "fn": 1264,
+        "precision": 0.3218,
+        "recall": 0.3485,
+        "f1": 0.3346,
+        "per_type": {
+          "CREDIT_CARD": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 63,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "MRN": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 158,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "PERSON": {
+            "tp": 426,
+            "fp": 366,
+            "fn": 197,
+            "precision": 0.5379,
+            "recall": 0.6838,
+            "f1": 0.6021
+          },
+          "PHONE": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 220,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "EMAIL": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 110,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "SSN": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 67,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "LOCATION": {
+            "tp": 170,
+            "fp": 493,
+            "fn": 218,
+            "precision": 0.2564,
+            "recall": 0.4381,
+            "f1": 0.3235
+          },
+          "NPI": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 99,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "ORGANIZATION": {
+            "tp": 80,
+            "fp": 566,
+            "fn": 132,
+            "precision": 0.1238,
+            "recall": 0.3774,
+            "f1": 0.1865
+          }
+        }
+      }
+    },
+    "presidio": {
+      "name": "Microsoft Presidio",
+      "categories": {
+        "standard": {
+          "metrics": {
+            "tp": 393,
+            "fp": 321,
+            "fn": 324,
+            "precision": 0.5504,
+            "recall": 0.5481,
+            "f1": 0.5493,
+            "per_type": {
+              "CREDIT_CARD": {
+                "tp": 60,
+                "fp": 11,
+                "fn": 0,
+                "precision": 0.8451,
+                "recall": 1.0,
+                "f1": 0.916
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 118,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 93,
+                "fp": 103,
+                "fn": 75,
+                "precision": 0.4745,
+                "recall": 0.5536,
+                "f1": 0.511
+              },
+              "PHONE": {
+                "tp": 39,
+                "fp": 83,
+                "fn": 45,
+                "precision": 0.3197,
+                "recall": 0.4643,
+                "f1": 0.3786
+              },
+              "EMAIL": {
+                "tp": 86,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "SSN": {
+                "tp": 60,
+                "fp": 49,
+                "fn": 0,
+                "precision": 0.5505,
+                "recall": 1.0,
+                "f1": 0.7101
+              },
+              "LOCATION": {
+                "tp": 55,
+                "fp": 75,
+                "fn": 86,
+                "precision": 0.4231,
+                "recall": 0.3901,
+                "f1": 0.4059
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 12.47,
+            "p95_ms": 21.35,
+            "p99_ms": 27.09,
+            "mean_ms": 14.23,
+            "total_docs": 500,
+            "total_seconds": 7.12,
+            "throughput_docs_per_sec": 70.21
+          },
+          "sample_count": 500
+        },
+        "ambiguous": {
+          "metrics": {
+            "tp": 142,
+            "fp": 225,
+            "fn": 158,
+            "precision": 0.3869,
+            "recall": 0.4733,
+            "f1": 0.4258,
+            "per_type": {
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 16,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 83,
+                "fp": 92,
+                "fn": 36,
+                "precision": 0.4743,
+                "recall": 0.6975,
+                "f1": 0.5646
+              },
+              "PHONE": {
+                "tp": 13,
+                "fp": 28,
+                "fn": 1,
+                "precision": 0.3171,
+                "recall": 0.9286,
+                "f1": 0.4727
+              },
+              "ORGANIZATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 71,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "LOCATION": {
+                "tp": 46,
+                "fp": 105,
+                "fn": 34,
+                "precision": 0.3046,
+                "recall": 0.575,
+                "f1": 0.3983
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 7.29,
+            "p95_ms": 12.06,
+            "p99_ms": 14.5,
+            "mean_ms": 8.01,
+            "total_docs": 300,
+            "total_seconds": 2.41,
+            "throughput_docs_per_sec": 124.74
+          },
+          "sample_count": 300
+        },
+        "contextual": {
+          "metrics": {
+            "tp": 77,
+            "fp": 250,
+            "fn": 111,
+            "precision": 0.2355,
+            "recall": 0.4096,
+            "f1": 0.299,
+            "per_type": {
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 17,
+                "fp": 86,
+                "fn": 29,
+                "precision": 0.165,
+                "recall": 0.3696,
+                "f1": 0.2282
+              },
+              "PHONE": {
+                "tp": 6,
+                "fp": 5,
+                "fn": 1,
+                "precision": 0.5455,
+                "recall": 0.8571,
+                "f1": 0.6667
+              },
+              "ORGANIZATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 49,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "LOCATION": {
+                "tp": 54,
+                "fp": 159,
+                "fn": 25,
+                "precision": 0.2535,
+                "recall": 0.6835,
+                "f1": 0.3699
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 8.29,
+            "p95_ms": 13.54,
+            "p99_ms": 17.81,
+            "mean_ms": 8.95,
+            "total_docs": 188,
+            "total_seconds": 1.69,
+            "throughput_docs_per_sec": 111.55
+          },
+          "sample_count": 188,
+          "css": {
+            "css": 0.4149,
+            "total_pairs": 94,
+            "correct": 12,
+            "partial": 54,
+            "incorrect": 28
+          }
+        },
+        "adversarial": {
+          "metrics": {
+            "tp": 386,
+            "fp": 354,
+            "fn": 349,
+            "precision": 0.5216,
+            "recall": 0.5252,
+            "f1": 0.5234,
+            "per_type": {
+              "CREDIT_CARD": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "NPI": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 79,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "LOCATION": {
+                "tp": 15,
+                "fp": 154,
+                "fn": 73,
+                "precision": 0.0888,
+                "recall": 0.1705,
+                "f1": 0.1167
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 37,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 233,
+                "fp": 85,
+                "fn": 57,
+                "precision": 0.7327,
+                "recall": 0.8034,
+                "f1": 0.7664
+              },
+              "ORGANIZATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 92,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "EMAIL": {
+                "tp": 24,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "SSN": {
+                "tp": 5,
+                "fp": 10,
+                "fn": 2,
+                "precision": 0.3333,
+                "recall": 0.7143,
+                "f1": 0.4545
+              },
+              "PHONE": {
+                "tp": 106,
+                "fp": 105,
+                "fn": 9,
+                "precision": 0.5024,
+                "recall": 0.9217,
+                "f1": 0.6503
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 13.31,
+            "p95_ms": 60.46,
+            "p99_ms": 69.97,
+            "mean_ms": 23.99,
+            "total_docs": 200,
+            "total_seconds": 4.8,
+            "throughput_docs_per_sec": 41.66
+          },
+          "sample_count": 200
+        }
+      },
+      "aggregate": {
+        "tp": 998,
+        "fp": 1150,
+        "fn": 942,
+        "precision": 0.4646,
+        "recall": 0.5144,
+        "f1": 0.4883,
+        "per_type": {
+          "CREDIT_CARD": {
+            "tp": 63,
+            "fp": 11,
+            "fn": 0,
+            "precision": 0.8514,
+            "recall": 1.0,
+            "f1": 0.9197
+          },
+          "MRN": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 158,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "PERSON": {
+            "tp": 426,
+            "fp": 366,
+            "fn": 197,
+            "precision": 0.5379,
+            "recall": 0.6838,
+            "f1": 0.6021
+          },
+          "PHONE": {
+            "tp": 164,
+            "fp": 221,
+            "fn": 56,
+            "precision": 0.426,
+            "recall": 0.7455,
+            "f1": 0.5421
+          },
+          "EMAIL": {
+            "tp": 110,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "SSN": {
+            "tp": 65,
+            "fp": 59,
+            "fn": 2,
+            "precision": 0.5242,
+            "recall": 0.9701,
+            "f1": 0.6806
+          },
+          "LOCATION": {
+            "tp": 170,
+            "fp": 493,
+            "fn": 218,
+            "precision": 0.2564,
+            "recall": 0.4381,
+            "f1": 0.3235
+          },
+          "NPI": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 99,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "ORGANIZATION": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 212,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        }
+      }
+    },
+    "ambientmeta": {
+      "name": "AmbientMeta Privacy Guard",
+      "categories": {
+        "standard": {
+          "metrics": {
+            "tp": 453,
+            "fp": 203,
+            "fn": 264,
+            "precision": 0.6905,
+            "recall": 0.6318,
+            "f1": 0.6599,
+            "per_type": {
+              "CREDIT_CARD": {
+                "tp": 60,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "MRN": {
+                "tp": 55,
+                "fp": 0,
+                "fn": 63,
+                "precision": 1.0,
+                "recall": 0.4661,
+                "f1": 0.6358
+              },
+              "PERSON": {
+                "tp": 101,
+                "fp": 106,
+                "fn": 67,
+                "precision": 0.4879,
+                "recall": 0.6012,
+                "f1": 0.5387
+              },
+              "PHONE": {
+                "tp": 49,
+                "fp": 13,
+                "fn": 35,
+                "precision": 0.7903,
+                "recall": 0.5833,
+                "f1": 0.6712
+              },
+              "EMAIL": {
+                "tp": 85,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.9884,
+                "recall": 0.9884,
+                "f1": 0.9884
+              },
+              "SSN": {
+                "tp": 58,
+                "fp": 10,
+                "fn": 2,
+                "precision": 0.8529,
+                "recall": 0.9667,
+                "f1": 0.9062
+              },
+              "LOCATION": {
+                "tp": 45,
+                "fp": 73,
+                "fn": 96,
+                "precision": 0.3814,
+                "recall": 0.3191,
+                "f1": 0.3475
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 34.4,
+            "p95_ms": 43.42,
+            "p99_ms": 641.2,
+            "mean_ms": 37.08,
+            "total_docs": 500,
+            "total_seconds": 146.8,
+            "throughput_docs_per_sec": 3.41
+          },
+          "sample_count": 500
+        },
+        "ambiguous": {
+          "metrics": {
+            "tp": 191,
+            "fp": 277,
+            "fn": 109,
+            "precision": 0.4081,
+            "recall": 0.6367,
+            "f1": 0.4974,
+            "per_type": {
+              "NPI": {
+                "tp": 16,
+                "fp": 7,
+                "fn": 0,
+                "precision": 0.6957,
+                "recall": 1.0,
+                "f1": 0.8205
+              },
+              "PERSON": {
+                "tp": 97,
+                "fp": 84,
+                "fn": 22,
+                "precision": 0.5359,
+                "recall": 0.8151,
+                "f1": 0.6467
+              },
+              "PHONE": {
+                "tp": 5,
+                "fp": 7,
+                "fn": 9,
+                "precision": 0.4167,
+                "recall": 0.3571,
+                "f1": 0.3846
+              },
+              "ORGANIZATION": {
+                "tp": 14,
+                "fp": 78,
+                "fn": 57,
+                "precision": 0.1522,
+                "recall": 0.1972,
+                "f1": 0.1718
+              },
+              "LOCATION": {
+                "tp": 59,
+                "fp": 101,
+                "fn": 21,
+                "precision": 0.3688,
+                "recall": 0.7375,
+                "f1": 0.4917
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 15.75,
+            "p95_ms": 38.91,
+            "p99_ms": 566.25,
+            "mean_ms": 33.93,
+            "total_docs": 300,
+            "total_seconds": 83.55,
+            "throughput_docs_per_sec": 3.59
+          },
+          "sample_count": 300
+        },
+        "contextual": {
+          "metrics": {
+            "tp": 102,
+            "fp": 333,
+            "fn": 86,
+            "precision": 0.2345,
+            "recall": 0.5426,
+            "f1": 0.3274,
+            "per_type": {
+              "NPI": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.8,
+                "recall": 1.0,
+                "f1": 0.8889
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "PERSON": {
+                "tp": 33,
+                "fp": 104,
+                "fn": 13,
+                "precision": 0.2409,
+                "recall": 0.7174,
+                "f1": 0.3607
+              },
+              "PHONE": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.75,
+                "recall": 0.8571,
+                "f1": 0.8
+              },
+              "ORGANIZATION": {
+                "tp": 8,
+                "fp": 82,
+                "fn": 41,
+                "precision": 0.0889,
+                "recall": 0.1633,
+                "f1": 0.1151
+              },
+              "LOCATION": {
+                "tp": 51,
+                "fp": 144,
+                "fn": 28,
+                "precision": 0.2615,
+                "recall": 0.6456,
+                "f1": 0.3723
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 18.3,
+            "p95_ms": 40.7,
+            "p99_ms": 639.71,
+            "mean_ms": 37.27,
+            "total_docs": 188,
+            "total_seconds": 53.35,
+            "throughput_docs_per_sec": 3.52
+          },
+          "sample_count": 188,
+          "css": {
+            "css": 0.5585,
+            "total_pairs": 94,
+            "correct": 31,
+            "partial": 43,
+            "incorrect": 20
+          }
+        },
+        "adversarial": {
+          "metrics": {
+            "tp": 569,
+            "fp": 436,
+            "fn": 166,
+            "precision": 0.5662,
+            "recall": 0.7741,
+            "f1": 0.654,
+            "per_type": {
+              "CREDIT_CARD": {
+                "tp": 3,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.6,
+                "recall": 1.0,
+                "f1": 0.75
+              },
+              "NPI": {
+                "tp": 79,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.9875,
+                "recall": 1.0,
+                "f1": 0.9937
+              },
+              "LOCATION": {
+                "tp": 38,
+                "fp": 92,
+                "fn": 50,
+                "precision": 0.2923,
+                "recall": 0.4318,
+                "f1": 0.3486
+              },
+              "MRN": {
+                "tp": 34,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.9189,
+                "f1": 0.9577
+              },
+              "PERSON": {
+                "tp": 237,
+                "fp": 116,
+                "fn": 53,
+                "precision": 0.6714,
+                "recall": 0.8172,
+                "f1": 0.7372
+              },
+              "ORGANIZATION": {
+                "tp": 43,
+                "fp": 214,
+                "fn": 49,
+                "precision": 0.1673,
+                "recall": 0.4674,
+                "f1": 0.2464
+              },
+              "EMAIL": {
+                "tp": 21,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.9545,
+                "recall": 0.875,
+                "f1": 0.913
+              },
+              "SSN": {
+                "tp": 5,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.7143,
+                "recall": 0.7143,
+                "f1": 0.7143
+              },
+              "PHONE": {
+                "tp": 109,
+                "fp": 8,
+                "fn": 6,
+                "precision": 0.9316,
+                "recall": 0.9478,
+                "f1": 0.9397
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 35.85,
+            "p95_ms": 85.8,
+            "p99_ms": 562.14,
+            "mean_ms": 48.48,
+            "total_docs": 200,
+            "total_seconds": 59.87,
+            "throughput_docs_per_sec": 3.34
+          },
+          "sample_count": 200
+        }
+      },
+      "aggregate": {
+        "tp": 1315,
+        "fp": 1249,
+        "fn": 625,
+        "precision": 0.5129,
+        "recall": 0.6778,
+        "f1": 0.5839,
+        "per_type": {
+          "CREDIT_CARD": {
+            "tp": 63,
+            "fp": 2,
+            "fn": 0,
+            "precision": 0.9692,
+            "recall": 1.0,
+            "f1": 0.9844
+          },
+          "MRN": {
+            "tp": 89,
+            "fp": 0,
+            "fn": 69,
+            "precision": 1.0,
+            "recall": 0.5633,
+            "f1": 0.7206
+          },
+          "PERSON": {
+            "tp": 468,
+            "fp": 410,
+            "fn": 155,
+            "precision": 0.533,
+            "recall": 0.7512,
+            "f1": 0.6236
+          },
+          "PHONE": {
+            "tp": 169,
+            "fp": 30,
+            "fn": 51,
+            "precision": 0.8492,
+            "recall": 0.7682,
+            "f1": 0.8067
+          },
+          "EMAIL": {
+            "tp": 106,
+            "fp": 2,
+            "fn": 4,
+            "precision": 0.9815,
+            "recall": 0.9636,
+            "f1": 0.9725
+          },
+          "SSN": {
+            "tp": 63,
+            "fp": 12,
+            "fn": 4,
+            "precision": 0.84,
+            "recall": 0.9403,
+            "f1": 0.8873
+          },
+          "LOCATION": {
+            "tp": 193,
+            "fp": 410,
+            "fn": 195,
+            "precision": 0.3201,
+            "recall": 0.4974,
+            "f1": 0.3895
+          },
+          "NPI": {
+            "tp": 99,
+            "fp": 9,
+            "fn": 0,
+            "precision": 0.9167,
+            "recall": 1.0,
+            "f1": 0.9565
+          },
+          "ORGANIZATION": {
+            "tp": 65,
+            "fp": 374,
+            "fn": 147,
+            "precision": 0.1481,
+            "recall": 0.3066,
+            "f1": 0.1997
+          }
+        }
+      }
+    }
+  }
+}

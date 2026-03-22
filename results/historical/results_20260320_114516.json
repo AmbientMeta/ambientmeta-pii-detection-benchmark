@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "timestamp": "2026-03-20T11:45:16.656308+00:00",
+    "python_version": "3.13.0 (v3.13.0:60403a5409f, Oct  7 2024, 00:37:40) [Clang 15.0.0 (clang-1500.3.9.4)]",
+    "platform": "macOS-15.7.3-x86_64-i386-64bit-Mach-O",
+    "dataset_hashes": {
+      "standard/standard_entities.jsonl": "e8c956d68659591faf82985f0253e923490480478dddbd88029ab1cca5d874dd",
+      "ambiguous/ambiguous_spans.jsonl": "1989e9d9a288dc46f633dd8ba066922e9f3494685489d39015c6efa7231c35ed",
+      "contextual/contextual_detection.jsonl": "591b41d48e2331bcee9b17e15b8552eb1c9d121551dfbe3c010d28137143a652",
+      "adversarial/adversarial_cases.jsonl": "86f0952464e25ac7d743f3821b28d3988b5c9a50483a50005b20e2dfed473fc5"
+    }
+  },
+  "adapters": {}
+}

@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "timestamp": "2026-03-20T03:12:24.355147+00:00",
+    "python_version": "3.13.0 (v3.13.0:60403a5409f, Oct  7 2024, 00:37:40) [Clang 15.0.0 (clang-1500.3.9.4)]",
+    "platform": "macOS-15.7.3-x86_64-i386-64bit-Mach-O",
+    "dataset_hashes": {
+      "standard/standard_entities.jsonl": "d8729fd05a35b263cec9887b4a7e8dfa3bacfcf6f822e144b7f654c1c2ad2632"
+    }
+  },
+  "adapters": {
+    "regex": {
+      "name": "Regex Only",
+      "categories": {
+        "standard": {
+          "metrics": {
+            "tp": 205,
+            "fp": 59,
+            "fn": 512,
+            "precision": 0.7765,
+            "recall": 0.2859,
+            "f1": 0.4179,
+            "per_type": {
+              "LOCATION": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 141,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "EMAIL": {
+                "tp": 81,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.9878,
+                "recall": 0.9419,
+                "f1": 0.9643
+              },
+              "PERSON": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 168,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "CREDIT_CARD": {
+                "tp": 48,
+                "fp": 5,
+                "fn": 12,
+                "precision": 0.9057,
+                "recall": 0.8,
+                "f1": 0.8496
+              },
+              "PHONE": {
+                "tp": 32,
+                "fp": 49,
+                "fn": 52,
+                "precision": 0.3951,
+                "recall": 0.381,
+                "f1": 0.3879
+              },
+              "SSN": {
+                "tp": 44,
+                "fp": 4,
+                "fn": 16,
+                "precision": 0.9167,
+                "recall": 0.7333,
+                "f1": 0.8148
+              },
+              "MRN": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 118,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            }
+          },
+          "latency": {
+            "p50_ms": 0.04,
+            "p95_ms": 0.07,
+            "p99_ms": 0.09,
+            "mean_ms": 0.04,
+            "total_docs": 500,
+            "total_seconds": 0.02,
+            "throughput_docs_per_sec": 22273.45
+          },
+          "sample_count": 500
+        }
+      },
+      "aggregate": {
+        "tp": 205,
+        "fp": 59,
+        "fn": 512,
+        "precision": 0.7765,
+        "recall": 0.2859,
+        "f1": 0.4179,
+        "per_type": {
+          "LOCATION": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 141,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "EMAIL": {
+            "tp": 81,
+            "fp": 1,
+            "fn": 5,
+            "precision": 0.9878,
+            "recall": 0.9419,
+            "f1": 0.9643
+          },
+          "PERSON": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 168,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "CREDIT_CARD": {
+            "tp": 48,
+            "fp": 5,
+            "fn": 12,
+            "precision": 0.9057,
+            "recall": 0.8,
+            "f1": 0.8496
+          },
+          "PHONE": {
+            "tp": 32,
+            "fp": 49,
+            "fn": 52,
+            "precision": 0.3951,
+            "recall": 0.381,
+            "f1": 0.3879
+          },
+          "SSN": {
+            "tp": 44,
+            "fp": 4,
+            "fn": 16,
+            "precision": 0.9167,
+            "recall": 0.7333,
+            "f1": 0.8148
+          },
+          "MRN": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 118,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        }
+      }
+    }
+  }
+}
