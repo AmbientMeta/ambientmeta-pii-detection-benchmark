@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PII Annotator</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f7; color: #1d1d1f; font-size: 14px; }
+
+/* Header */
+.header { background: #1a1a2e; color: #fff; padding: 10px 24px; position: sticky; top: 0; z-index: 200; display: flex; justify-content: space-between; align-items: center; height: 44px; }
+.header h1 { font-size: 15px; font-weight: 600; }
+.header-stats { font-size: 11px; color: #a0a0b0; }
+.header-right { display: flex; gap: 8px; align-items: center; }
+.header-right button { font-size: 11px; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: #fff; cursor: pointer; }
+.header-right button:hover { background: rgba(255,255,255,0.1); }
+
+/* Tabs */
+.tabs { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 0 24px; display: flex; gap: 0; position: sticky; top: 44px; z-index: 199; }
+.tab { padding: 10px 16px; font-size: 12px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; color: #666; }
+.tab:hover { color: #333; }
+.tab.active { color: #1a73e8; border-bottom-color: #1a73e8; }
+
+/* Controls */
+.controls { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 8px 24px; display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+.controls select, .controls input { font-size: 12px; padding: 5px 8px; border: 1px solid #d0d0d0; border-radius: 5px; }
+.ctrl-group { display: flex; flex-direction: column; }
+.ctrl-group label { font-size: 10px; color: #666; font-weight: 500; margin-bottom: 2px; }
+.nav-buttons { display: flex; gap: 4px; margin-left: auto; align-items: center; }
+.nav-buttons button { padding: 5px 12px; border: 1px solid #d0d0d0; border-radius: 5px; background: #fff; cursor: pointer; font-size: 12px; }
+.nav-buttons button:hover { background: #f0f0f0; }
+.nav-buttons .btn-create { background: #28a745; color: #fff; border-color: #28a745; font-weight: 600; }
+.counter { font-size: 12px; color: #666; min-width: 90px; text-align: center; }
+.sort-group { display: flex; gap: 4px; align-items: center; }
+
+/* Main */
+.main { padding: 12px 24px; max-width: 1100px; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Sample card */
+.sample { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+.sample.flagged { border-color: #dc3545; background: #fff5f5; }
+.sample.focused { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.2); }
+.sample-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+.sample-id { font-family: monospace; font-size: 10px; color: #999; }
+.badge { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 3px; }
+.badge-cat { background: #eee; color: #555; }
+.badge-src { background: #e8f0fe; color: #1a73e8; }
+.badge-flagged { background: #f8d7da; color: #721c24; }
+.badge-reviewed { background: #d4edda; color: #155724; }
+.badge-modified { background: #fff3cd; color: #856404; }
+.badge-warn { background: #f8d7da; color: #721c24; font-size: 9px; }
+
+/* Text display */
+.text-display { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; line-height: 1.8; background: #fafafa; padding: 12px; border-radius: 6px; margin-bottom: 8px; white-space: pre-wrap; word-break: break-word; cursor: text; user-select: text; }
+.ann { padding: 1px 0; border-radius: 2px; cursor: pointer; }
+.ann:hover { filter: brightness(0.9); }
+.ann-PERSON { background: #ffe066; } .ann-EMAIL { background: #b3e5fc; }
+.ann-PHONE { background: #c8e6c9; } .ann-SSN { background: #ffccbc; }
+.ann-CREDIT_CARD { background: #e1bee7; } .ann-LOCATION { background: #b2dfdb; }
+.ann-ORGANIZATION { background: #ffe0b2; } .ann-NPI { background: #f0f4c3; }
+.ann-MRN { background: #d1c4e9; } .ann-DEA { background: #ffcdd2; }
+.ann-ADDRESS { background: #b2ebf2; } .ann-other { background: #e0e0e0; }
+.ann-label { font-size: 9px; font-weight: 700; vertical-align: super; color: #555; margin-left: 1px; }
+.ann-rejected { text-decoration: line-through; opacity: 0.4; }
+
+/* Annotation rows */
+.ann-row { display: flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 4px; margin-bottom: 2px; font-size: 12px; }
+.ann-row:hover { background: #f5f5f5; }
+.ann-row .ann-span { font-family: monospace; font-weight: 500; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ann-row select { font-size: 11px; padding: 2px 4px; border: 1px solid #d0d0d0; border-radius: 3px; }
+.ann-row button { font-size: 10px; padding: 2px 8px; border-radius: 3px; border: 1px solid #d0d0d0; background: #fff; cursor: pointer; }
+.ann-row.rejected { opacity: 0.4; text-decoration: line-through; }
+
+/* Add annotation bar */
+.add-bar { background: #f0f8ff; border: 1px dashed #90caf9; border-radius: 6px; padding: 6px 10px; margin-bottom: 8px; font-size: 12px; display: none; align-items: center; gap: 6px; }
+.add-bar.visible { display: flex; }
+.add-bar select, .add-bar button { font-size: 11px; padding: 3px 8px; border: 1px solid #d0d0d0; border-radius: 3px; }
+.add-bar button.add { background: #1a73e8; color: #fff; border: none; }
+
+/* Edit text */
+.edit-text { display: none; margin-bottom: 8px; }
+.edit-text.visible { display: block; }
+.edit-text textarea { width: 100%; min-height: 80px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; padding: 10px; border: 2px solid #90caf9; border-radius: 6px; resize: vertical; }
+.fake-btn { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); cursor: pointer; }
+.fake-btn:hover { filter: brightness(0.92); }
+
+/* Sample actions */
+.sample-actions { display: flex; gap: 4px; flex-wrap: wrap; }
+.sample-actions button { font-size: 11px; padding: 3px 9px; border-radius: 4px; border: 1px solid #d0d0d0; background: #fff; cursor: pointer; }
+.sample-actions button:hover { background: #f0f0f0; }
+.btn-flag { border-color: #dc3545 !important; color: #dc3545; }
+.btn-approve { border-color: #28a745 !important; color: #28a745; }
+.btn-edit { border-color: #1a73e8 !important; color: #1a73e8; }
+.btn-suggest { border-color: #6f42c1 !important; color: #6f42c1; }
+
+/* Create panel */
+.create-panel { background: #fff; border: 2px solid #28a745; border-radius: 8px; padding: 16px; margin-bottom: 12px; display: none; }
+.create-panel.visible { display: block; }
+.create-panel h3 { font-size: 14px; margin-bottom: 8px; }
+.create-panel textarea { width: 100%; min-height: 100px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; padding: 10px; border: 2px solid #28a745; border-radius: 6px; resize: vertical; margin-bottom: 6px; }
+.create-fields { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.create-preview { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; line-height: 1.8; background: #fafafa; padding: 12px; border-radius: 6px; margin-bottom: 8px; white-space: pre-wrap; word-break: break-word; cursor: text; user-select: text; min-height: 40px; }
+
+/* Stats panel */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.stat-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 14px; }
+.stat-card h4 { font-size: 12px; color: #666; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-row { display: flex; justify-content: space-between; font-size: 13px; padding: 2px 0; }
+.stat-row .val { font-weight: 600; }
+.stat-bar { height: 6px; background: #eee; border-radius: 3px; margin-top: 2px; }
+.stat-bar-fill { height: 100%; border-radius: 3px; background: #1a73e8; }
+
+/* Bulk panel */
+.bulk-panel { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+.bulk-panel h3 { font-size: 14px; margin-bottom: 10px; }
+.bulk-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.bulk-row select, .bulk-row input { font-size: 12px; padding: 5px 8px; border: 1px solid #d0d0d0; border-radius: 5px; }
+.bulk-row button { font-size: 12px; padding: 5px 12px; border-radius: 5px; border: none; cursor: pointer; }
+
+/* Import zone */
+.drop-zone { border: 2px dashed #d0d0d0; border-radius: 8px; padding: 40px; text-align: center; color: #999; margin-bottom: 12px; transition: all 0.2s; }
+.drop-zone.hover { border-color: #1a73e8; background: #f0f8ff; color: #1a73e8; }
+.drop-zone p { margin-bottom: 8px; }
+.drop-zone button { font-size: 12px; padding: 6px 16px; border-radius: 5px; border: 1px solid #1a73e8; background: #fff; color: #1a73e8; cursor: pointer; }
+
+/* Export bar */
+.export-bar { background: #fff; border-top: 1px solid #e0e0e0; padding: 10px 24px; position: sticky; bottom: 0; z-index: 199; display: flex; gap: 8px; align-items: center; }
+.export-bar button { padding: 6px 12px; border-radius: 5px; border: none; font-size: 12px; font-weight: 500; cursor: pointer; }
+.btn-primary { background: #1a73e8; color: #fff; }
+.btn-danger { background: #dc3545; color: #fff; }
+.btn-secondary { background: #e0e0e0; color: #333; }
+.export-stats { font-size: 11px; color: #666; margin-left: auto; }
+
+/* Keyboard shortcuts help */
+.shortcuts { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; }
+.shortcuts h3 { font-size: 14px; margin-bottom: 10px; }
+.shortcut-row { display: flex; gap: 12px; padding: 4px 0; font-size: 13px; }
+.shortcut-key { font-family: monospace; background: #f5f5f5; padding: 2px 8px; border-radius: 3px; border: 1px solid #ddd; min-width: 40px; text-align: center; font-weight: 600; }
+
+/* Legend */
+.legend { display: flex; gap: 6px; flex-wrap: wrap; padding: 4px 24px; background: #fff; border-bottom: 1px solid #eee; font-size: 10px; }
+.legend span { padding: 1px 6px; border-radius: 3px; }
+
+/* Settings modal */
+.settings-indicator { font-size: 10px; color: rgba(255,255,255,0.55); margin-right: 10px; font-family: monospace; cursor: pointer; }
+.settings-indicator:hover { color: rgba(255,255,255,0.9); }
+.settings-indicator.warn { color: #fbbf24; }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9999; display: none; align-items: center; justify-content: center; }
+.modal-backdrop.show { display: flex; }
+.modal { background: #fff; border-radius: 8px; padding: 24px; width: 440px; max-width: 92vw; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.modal h2 { margin: 0 0 16px 0; font-size: 18px; color: #1a1a2e; }
+.modal .field { margin-bottom: 14px; }
+.modal label { display: block; font-size: 11px; font-weight: 600; color: #555; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.modal input { width: 100%; padding: 8px 10px; border: 1px solid #d0d0d0; border-radius: 5px; font-size: 13px; font-family: monospace; box-sizing: border-box; }
+.modal input:focus { outline: none; border-color: #2a7ae2; box-shadow: 0 0 0 3px rgba(42,122,226,0.15); }
+.modal .hint { font-size: 11px; color: #888; margin-top: 4px; }
+.modal .presets { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.modal .preset-btn { font-size: 10px; padding: 3px 8px; border-radius: 3px; border: 1px solid #d0d0d0; background: #f7f7f9; cursor: pointer; color: #555; }
+.modal .preset-btn:hover { background: #e8f0fe; border-color: #2a7ae2; color: #2a7ae2; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; padding-top: 14px; border-top: 1px solid #eee; }
+.modal-actions button { padding: 7px 16px; border-radius: 5px; font-size: 13px; cursor: pointer; }
+.modal-actions .btn-secondary { background: #fff; border: 1px solid #d0d0d0; color: #555; }
+.modal-actions .btn-primary { background: #2a7ae2; border: 1px solid #2a7ae2; color: #fff; font-weight: 600; }
+.modal-actions .btn-primary:hover { background: #1e5fc1; }
+.modal-status { font-size: 11px; padding: 6px 10px; border-radius: 4px; margin-top: 10px; display: none; }
+.modal-status.show { display: block; }
+.modal-status.success { background: #d4edda; color: #155724; }
+.modal-status.error { background: #f8d7da; color: #721c24; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>PII Annotation Tool</h1>
+  <div class="header-stats" id="headerStats"></div>
+  <div class="header-right">
+    <span class="settings-indicator" id="apiUrlIndicator" onclick="openSettings()" title="Click to change API endpoint">⚙ loading...</span>
+    <button onclick="openSettings()">Settings</button>
+    <button onclick="showTab('shortcuts')">? Shortcuts</button>
+  </div>
+</div>
+
+<!-- Settings modal -->
+<div class="modal-backdrop" id="settingsBackdrop" onclick="if(event.target===this)closeSettings()">
+  <div class="modal">
+    <h2>API Settings</h2>
+    <div class="field">
+      <label>API Endpoint URL</label>
+      <input type="text" id="settingsApiUrl" placeholder="http://localhost:8000/v1" autocomplete="off" spellcheck="false">
+      <div class="presets">
+        <button class="preset-btn" type="button" onclick="setPreset('http://localhost:8000/v1')">Local</button>
+        <button class="preset-btn" type="button" onclick="setPreset('https://api-staging.ambientmeta.com/v1')">Staging</button>
+        <button class="preset-btn" type="button" onclick="setPreset('https://api.ambientmeta.com/v1')">Production</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>API Key</label>
+      <input type="password" id="settingsApiKey" placeholder="am_..." autocomplete="off" spellcheck="false">
+      <div class="hint">Stored in browser localStorage. Use a testing-account key for local dev.</div>
+    </div>
+    <div class="modal-status" id="settingsStatus"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeSettings()">Cancel</button>
+      <button class="btn-primary" onclick="saveSettings()">Save & Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="annotate" onclick="showTab('annotate')">Annotate</div>
+  <div class="tab" data-tab="import" onclick="showTab('import')">Import</div>
+  <div class="tab" data-tab="bulk" onclick="showTab('bulk')">Bulk Ops</div>
+  <div class="tab" data-tab="stats" onclick="showTab('stats')">Stats</div>
+  <div class="tab" data-tab="shortcuts" onclick="showTab('shortcuts')">Shortcuts</div>
+</div>
+
+<!-- ANNOTATE TAB -->
+<div class="panel active" id="panel-annotate">
+<div class="legend">
+  <span class="ann ann-PERSON">PERSON</span><span class="ann ann-EMAIL">EMAIL</span>
+  <span class="ann ann-PHONE">PHONE</span><span class="ann ann-SSN">SSN</span>
+  <span class="ann ann-CREDIT_CARD">CC</span><span class="ann ann-LOCATION">LOC</span>
+  <span class="ann ann-ORGANIZATION">ORG</span><span class="ann ann-NPI">NPI</span>
+  <span class="ann ann-MRN">MRN</span><span class="ann ann-ADDRESS">ADDR</span>
+</div>
+<div class="controls" id="annotateControls">
+  <div class="ctrl-group"><label>Category</label><select id="filterCat"><option value="">All</option></select></div>
+  <div class="ctrl-group"><label>Source</label><select id="filterSrc"><option value="">All</option></select></div>
+  <div class="ctrl-group"><label>Status</label>
+    <select id="filterStatus"><option value="">All</option><option value="unreviewed">Unreviewed</option><option value="reviewed">Reviewed</option><option value="flagged">Flagged</option><option value="modified">Modified</option><option value="no_annotations">No annotations</option><option value="has_warnings">Has warnings</option></select>
+  </div>
+  <div class="ctrl-group"><label>Search</label><input type="text" id="searchBox" placeholder="Search text..."></div>
+  <div class="ctrl-group"><label>Sort</label>
+    <select id="sortBy"><option value="default">Default</option><option value="length_asc">Shortest</option><option value="length_desc">Longest</option><option value="ann_count_asc">Fewest annotations</option><option value="ann_count_desc">Most annotations</option><option value="source">Source</option></select>
+  </div>
+  <div class="nav-buttons">
+    <button class="btn-create" onclick="toggleCreate()">+ New</button>
+    <button onclick="batchAutoDetect()" class="btn-suggest" style="border-color:#6f42c1;color:#6f42c1">Auto-detect All</button>
+    <button onclick="approvePageAndNext()" style="background:#28a745;color:#fff;border-color:#28a745">Approve Page</button>
+    <button onclick="prevPage()">&larr;</button>
+    <span class="counter" id="pageCounter"></span>
+    <button onclick="nextPage()">&rarr;</button>
+  </div>
+</div>
+<div style="height:3px;background:#eee;position:sticky;top:80px;z-index:198"><div id="progressBar" style="height:100%;background:#28a745;transition:width 0.3s"></div></div>
+<div class="main">
+  <div class="create-panel" id="createPanel">
+    <h3>Create New Sample</h3>
+    <div class="create-fields">
+      <div class="ctrl-group"><label>Category</label>
+        <select id="newCat"><option value="standard">standard</option><option value="ambiguous">ambiguous</option><option value="contextual">contextual</option><option value="adversarial">adversarial</option><option value="custom">custom</option></select>
+      </div>
+      <div class="ctrl-group"><label>Source</label><input type="text" id="newSource" value="manual" placeholder="e.g. government"></div>
+      <div class="ctrl-group"><label>Domain</label><input type="text" id="newDomain" value="general" placeholder="e.g. healthcare"></div>
+      <div class="ctrl-group"><label>&nbsp;</label><button class="btn-suggest" style="font-size:11px;padding:5px 10px;border-radius:4px;border:1px solid #6f42c1;background:#fff;cursor:pointer;color:#6f42c1" onclick="suggestNewAnnotations()">Auto-detect</button></div>
+    </div>
+    <label>Text</label>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">
+      <span style="font-size:10px;color:#666;align-self:center">Insert fake:</span>
+      <button class="fake-btn" style="background:#ffe066" onclick="insertFakeNew('name')">PERSON</button>
+      <button class="fake-btn" style="background:#b3e5fc" onclick="insertFakeNew('email')">EMAIL</button>
+      <button class="fake-btn" style="background:#c8e6c9" onclick="insertFakeNew('phone')">PHONE</button>
+      <button class="fake-btn" style="background:#ffccbc" onclick="insertFakeNew('ssn')">SSN</button>
+      <button class="fake-btn" style="background:#e1bee7" onclick="insertFakeNew('credit_card')">CC</button>
+      <button class="fake-btn" style="background:#b2dfdb" onclick="insertFakeNew('city')">LOC</button>
+      <button class="fake-btn" style="background:#ffe0b2" onclick="insertFakeNew('company')">ORG</button>
+      <button class="fake-btn" style="background:#f0f4c3" onclick="insertFakeNew('npi')">NPI</button>
+      <button class="fake-btn" style="background:#d1c4e9" onclick="insertFakeNew('mrn')">MRN</button>
+      <button class="fake-btn" style="background:#b2ebf2" onclick="insertFakeNew('address')">ADDR</button>
+    </div>
+    <textarea id="newText" placeholder="Type or paste text containing PII..."></textarea>
+    <label style="margin-top:4px;display:block">Preview (select text to annotate)</label>
+    <div class="create-preview" id="newPreview" onmouseup="handleNewSelection()"></div>
+    <div class="add-bar" id="newAddBar">
+      "<span id="newSelText"></span>" [<span id="newSelRange"></span>]
+      <select id="newSelType"><option value="PERSON">PERSON</option><option value="EMAIL">EMAIL</option><option value="PHONE">PHONE</option><option value="SSN">SSN</option><option value="CREDIT_CARD">CREDIT_CARD</option><option value="LOCATION">LOCATION</option><option value="ORGANIZATION">ORGANIZATION</option><option value="NPI">NPI</option><option value="MRN">MRN</option><option value="DEA">DEA</option><option value="ADDRESS">ADDRESS</option><option value="DATE_OF_BIRTH">DATE_OF_BIRTH</option><option value="IP_ADDRESS">IP_ADDRESS</option><option value="URL">URL</option><option value="CREDENTIALS">CREDENTIALS</option><option value="REFERENCE_ID">REFERENCE_ID</option></select>
+      <button class="add" onclick="addNewAnnotation()">Add</button>
+      <button onclick="cancelNewAdd()" style="background:#e0e0e0;color:#333;border:none">Cancel</button>
+    </div>
+    <div id="newAnnList" style="margin-bottom:8px"></div>
+    <div style="display:flex;gap:6px">
+      <button style="background:#28a745;color:#fff;border:none;padding:6px 14px;border-radius:5px;cursor:pointer;font-size:12px" onclick="saveNewSample()">Save Sample</button>
+      <button style="background:#e0e0e0;color:#333;border:none;padding:6px 14px;border-radius:5px;cursor:pointer;font-size:12px" onclick="toggleCreate()">Cancel</button>
+    </div>
+  </div>
+  <div id="sampleList"></div>
+</div>
+</div>
+
+<!-- IMPORT TAB -->
+<div class="panel" id="panel-import">
+<div class="main">
+  <div class="drop-zone" id="dropZone">
+    <p><strong>Drag & drop JSONL files here</strong></p>
+    <p style="font-size:12px">Each line: {"id": "...", "text": "...", "annotations": [{"start": 0, "end": 5, "text": "...", "entity_type": "PERSON"}]}</p>
+    <button onclick="document.getElementById('importFile').click()">Choose File</button>
+    <input type="file" id="importFile" style="display:none" accept=".jsonl,.json,.ndjson" onchange="handleImportFile(event)" multiple>
+  </div>
+  <div id="importLog" style="font-size:12px;color:#666"></div>
+</div>
+</div>
+
+<!-- BULK OPS TAB -->
+<div class="panel" id="panel-bulk">
+<div class="main">
+  <div class="bulk-panel">
+    <h3>Bulk Operations</h3>
+    <div class="bulk-row">
+      <span>Flag all samples from source:</span>
+      <select id="bulkFlagSrc"></select>
+      <button class="btn-danger" onclick="bulkFlagSource()">Flag All</button>
+    </div>
+    <div class="bulk-row">
+      <span>Approve all unmodified samples:</span>
+      <button style="background:#28a745;color:#fff" onclick="bulkApproveUnmodified()">Approve All Unmodified</button>
+    </div>
+    <div class="bulk-row">
+      <span>Remove all annotations of type:</span>
+      <select id="bulkRemoveType"><option value="PERSON">PERSON</option><option value="EMAIL">EMAIL</option><option value="PHONE">PHONE</option><option value="SSN">SSN</option><option value="CREDIT_CARD">CREDIT_CARD</option><option value="LOCATION">LOCATION</option><option value="ORGANIZATION">ORGANIZATION</option><option value="NPI">NPI</option><option value="MRN">MRN</option><option value="DEA">DEA</option><option value="ADDRESS">ADDRESS</option><option value="DATE_OF_BIRTH">DATE_OF_BIRTH</option><option value="IP_ADDRESS">IP_ADDRESS</option><option value="URL">URL</option><option value="CREDENTIALS">CREDENTIALS</option><option value="REFERENCE_ID">REFERENCE_ID</option></select>
+      <button class="btn-danger" onclick="bulkRemoveType()">Remove All</button>
+    </div>
+    <div class="bulk-row">
+      <span>Unflag all samples:</span>
+      <button class="btn-secondary" onclick="bulkUnflagAll()">Unflag All</button>
+    </div>
+    <div id="bulkLog" style="font-size:12px;color:#666;margin-top:8px"></div>
+  </div>
+</div>
+</div>
+
+<!-- STATS TAB -->
+<div class="panel" id="panel-stats">
+<div class="main"><div class="stats-grid" id="statsGrid"></div></div>
+</div>
+
+<!-- SHORTCUTS TAB -->
+<div class="panel" id="panel-shortcuts">
+<div class="main">
+  <div class="shortcuts">
+    <h3>Keyboard Shortcuts</h3>
+    <div class="shortcut-row"><span class="shortcut-key">&rarr;</span> Next page</div>
+    <div class="shortcut-row"><span class="shortcut-key">&larr;</span> Previous page</div>
+    <div class="shortcut-row"><span class="shortcut-key">Space</span> Approve focused sample and jump to next</div>
+    <div class="shortcut-row"><span class="shortcut-key">r</span> Mark focused sample as Reviewed</div>
+    <div class="shortcut-row"><span class="shortcut-key">f</span> Flag/unflag focused sample</div>
+    <div class="shortcut-row"><span class="shortcut-key">e</span> Edit focused sample text</div>
+    <div class="shortcut-row"><span class="shortcut-key">z</span> Undo last action on focused sample</div>
+    <div class="shortcut-row"><span class="shortcut-key">a</span> Auto-suggest annotations on focused sample</div>
+    <div class="shortcut-row"><span class="shortcut-key">n</span> Toggle New Sample panel</div>
+    <div class="shortcut-row"><span class="shortcut-key">1-9</span> After selecting text, assign entity type (1=PERSON, 2=EMAIL, etc.)</div>
+    <div class="shortcut-row"><span class="shortcut-key">Esc</span> Cancel current selection / close panels</div>
+    <p style="margin-top:12px;font-size:12px;color:#666">Click a sample to focus it. Shortcuts apply to the focused sample.</p>
+    <h3 style="margin-top:16px">Entity Type Numbers</h3>
+    <div id="typeNumbers"></div>
+  </div>
+</div>
+</div>
+
+<!-- EXPORT BAR -->
+<div class="export-bar">
+  <button class="btn-primary" onclick="exportClean()">Export JSONL</button>
+  <button class="btn-secondary" onclick="exportBIO()">Export BIO</button>
+  <button class="btn-secondary" onclick="exportState()">Save Progress</button>
+  <button class="btn-secondary" onclick="document.getElementById('stateFileInput').click()">Load Progress</button>
+  <button class="btn-danger" onclick="if(confirm('Clear all progress? This cannot be undone.'))clearState()">Reset</button>
+  <span class="export-stats" id="exportStats"></span>
+</div>
+<input type="file" id="stateFileInput" style="display:none" accept=".json" onchange="handleStateFile(event)">
+
+<script>
+const ENTITY_TYPES = __TYPES_JSON__;
+const PAGE_SIZE = 20;
+let SAMPLES = __SAMPLES_JSON__;
+let currentPage = 0;
+let filtered = [];
+const FAKE_PII = __FAKE_PII_JSON__;
+let fakePIIIndex = 0;
+let focusedSampleId = null;
+
+// ── API config (Settings UI) ──
+const DEFAULT_API_URL = 'http://localhost:8000/v1';
+let lastApiOk = true;  // tracks whether the last API call succeeded — drives indicator color
+
+function getApiConfig() {
+  const apiUrl = (localStorage.getItem('ambientmeta_api_url') || DEFAULT_API_URL).replace(/\/$/, '');
+  const apiKey = localStorage.getItem('ambientmeta_api_key') || '';
+  return { apiUrl, apiKey };
+}
+function ensureApiConfig() {
+  const { apiUrl, apiKey } = getApiConfig();
+  if (!apiKey) { openSettings(); return null; }
+  return { apiUrl, apiKey };
+}
+function apiHostnameLabel() {
+  const { apiUrl } = getApiConfig();
+  try {
+    const u = new URL(apiUrl);
+    if (u.hostname === 'localhost' || u.hostname === '127.0.0.1') return `localhost:${u.port||'80'}`;
+    if (u.hostname.startsWith('api-staging')) return 'staging';
+    if (u.hostname === 'api.ambientmeta.com') return 'production';
+    return u.hostname;
+  } catch { return 'invalid url'; }
+}
+function updateApiUrlIndicator() {
+  const el = document.getElementById('apiUrlIndicator');
+  if (!el) return;
+  const { apiKey } = getApiConfig();
+  const label = apiHostnameLabel();
+  let suffix = '';
+  if (!apiKey) suffix = ' (no key)';
+  else if (!lastApiOk) suffix = ' ⚠';
+  el.textContent = `⚙ ${label}${suffix}`;
+  el.classList.toggle('warn', !apiKey || !lastApiOk);
+  el.title = !apiKey
+    ? 'No API key configured. Click to open Settings.'
+    : !lastApiOk
+      ? `Last call to ${label} failed. Click to open Settings or check the server.`
+      : `Connected to ${label}. Click to change.`;
+}
+function markApiOk() { if (!lastApiOk) { lastApiOk = true; updateApiUrlIndicator(); } }
+function markApiFailed() { if (lastApiOk) { lastApiOk = false; updateApiUrlIndicator(); } }
+
+// Diagnostic message for failed API calls — distinguishes server-down vs endpoint-broken vs auth-failed
+function describeApiError(resp, hostnameLabel) {
+  if (resp.status === 401 || resp.status === 403) {
+    return `Auth failed (HTTP ${resp.status}) at ${hostnameLabel}. Check your API key in Settings.`;
+  }
+  if (resp.status === 429) {
+    return `Rate limited (HTTP 429) at ${hostnameLabel}. Wait a moment and retry.`;
+  }
+  if (resp.status >= 500) {
+    return `${hostnameLabel} returned HTTP ${resp.status}. The server is up but the sanitize endpoint is broken (often happens right after a bad deploy).`;
+  }
+  if (resp.status >= 400) {
+    return `Request rejected (HTTP ${resp.status}) at ${hostnameLabel}. Likely a malformed payload — check console for details.`;
+  }
+  return `Unexpected response: HTTP ${resp.status} from ${hostnameLabel}.`;
+}
+function describeNetworkError(err, hostnameLabel) {
+  return `Network error reaching ${hostnameLabel}: ${err.message}. ${
+    hostnameLabel.startsWith('localhost')
+      ? 'Is docker-compose running? Try: docker compose ps in the privacy-gateway directory.'
+      : 'Server may be down or unreachable.'
+  }`;
+}
+function openSettings() {
+  const { apiUrl, apiKey } = getApiConfig();
+  document.getElementById('settingsApiUrl').value = apiUrl;
+  document.getElementById('settingsApiKey').value = apiKey;
+  document.getElementById('settingsStatus').className = 'modal-status';
+  document.getElementById('settingsStatus').textContent = '';
+  document.getElementById('settingsBackdrop').classList.add('show');
+  setTimeout(() => document.getElementById('settingsApiUrl').focus(), 50);
+}
+function closeSettings() {
+  document.getElementById('settingsBackdrop').classList.remove('show');
+}
+function setPreset(url) {
+  document.getElementById('settingsApiUrl').value = url;
+}
+async function saveSettings() {
+  const url = document.getElementById('settingsApiUrl').value.trim().replace(/\/$/, '');
+  const key = document.getElementById('settingsApiKey').value.trim();
+  const status = document.getElementById('settingsStatus');
+  if (!url) { status.className = 'modal-status show error'; status.textContent = 'API URL required.'; return; }
+  if (!key) { status.className = 'modal-status show error'; status.textContent = 'API key required.'; return; }
+  // Save up front — even if the connection check fails the user still wants the settings persisted so they can fix the server side and retry.
+  localStorage.setItem('ambientmeta_api_url', url);
+  localStorage.setItem('ambientmeta_api_key', key);
+  // Compute hostname label using SAVED config (so apiHostnameLabel reads from localStorage)
+  const hostLabel = apiHostnameLabel();
+  // Layered check: /v1/health first (server up?), then /v1/sanitize (auth + endpoint working?)
+  status.className = 'modal-status show'; status.textContent = `Checking ${hostLabel}/v1/health ...`;
+  try {
+    const h = await fetch(url + '/health', { method: 'GET' });
+    if (!h.ok) {
+      lastApiOk = false; updateApiUrlIndicator();
+      status.className = 'modal-status show error';
+      status.textContent = `Server health check failed: HTTP ${h.status} at ${hostLabel}/v1/health. Server is reachable but unhealthy. Settings saved — fix the server and retry.`;
+      return;
+    }
+  } catch (err) {
+    lastApiOk = false; updateApiUrlIndicator();
+    status.className = 'modal-status show error';
+    status.textContent = describeNetworkError(err, hostLabel) + ' Settings saved locally.';
+    return;
+  }
+  status.className = 'modal-status show'; status.textContent = `Server up. Testing /sanitize with key ...`;
+  try {
+    const r = await fetch(url + '/sanitize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': key },
+      body: JSON.stringify({ text: 'Test ping from annotator settings.', mode: 'sanitize', config: { confidence_threshold: 0.0 } }),
+    });
+    if (r.ok) {
+      lastApiOk = true;
+      status.className = 'modal-status show success';
+      status.textContent = `✓ Connected to ${hostLabel}. Saved.`;
+      updateApiUrlIndicator();
+      setTimeout(closeSettings, 800);
+    } else {
+      lastApiOk = false; updateApiUrlIndicator();
+      status.className = 'modal-status show error';
+      status.textContent = describeApiError(r, hostLabel) + ' Settings saved — fix the issue and retry.';
+    }
+  } catch (err) {
+    lastApiOk = false; updateApiUrlIndicator();
+    status.className = 'modal-status show error';
+    status.textContent = describeNetworkError(err, hostLabel) + ' Settings saved locally.';
+  }
+}
+// Esc to close, Cmd/Ctrl+, to open
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('settingsBackdrop')?.classList.contains('show')) closeSettings();
+  if ((e.metaKey || e.ctrlKey) && e.key === ',') { e.preventDefault(); openSettings(); }
+});
+
+// ── State ──
+const STATE_KEY = 'pii_annotation_state_v3';
+let state = {};
+async function loadStateFromDisk() {
+  try {
+    const result = await window.__TAURI__.core.invoke('load_state', { path: stateFilePath() });
+    state = result || {};
+  } catch (e) {
+    console.log('No saved state found, starting fresh');
+    state = {};
+  }
+}
+function stateFilePath() {
+  return window.__TAURI_STATE_PATH__ || '/tmp/annotator_state.json';
+}
+async function saveState() {
+  updateAllStats();
+  try {
+    await window.__TAURI__.core.invoke('save_state', { path: stateFilePath(), state: state });
+  } catch (e) {
+    console.error('Failed to save state:', e);
+  }
+}
+
+// Hash computation for samples that don't have one (imports, new samples)
+function computeHash(text, anns) {
+  const s = text + (anns || []).map(a => a.start+':'+a.end+':'+a.entity_type).sort().join(',');
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
+
+// Ensure every sample has a hash (covers imports and new samples)
+function ensureHash(sample) {
+  if (!sample._hash) sample._hash = computeHash(sample.text, sample.annotations || []);
+}
+SAMPLES.forEach(ensureHash);
+
+// Stamp hash when user intentionally modifies a sample
+function stampHash(id) {
+  const sample = SAMPLES.find(s => s.id === id);
+  if (!sample) return;
+  ensureHash(sample);
+  state[id]._hash = sample._hash;
+}
+
+function clearState() { state = {}; undoStack = {}; saveState(); render(); }
+
+// ── Undo (one level per sample) ──
+let undoStack = {};
+function pushUndo(id) {
+  undoStack[id] = JSON.parse(JSON.stringify(state[id] || {}));
+}
+function undo(id) {
+  if (!undoStack[id]) return;
+  state[id] = undoStack[id];
+  delete undoStack[id];
+  saveState(); render();
+}
+
+function getS(id) {
+  if (!state[id]) state[id] = {};
+  const sample = SAMPLES.find(s => s.id === id);
+  if (sample) {
+    ensureHash(sample);
+    const hasData = ('annotations' in state[id]) || state[id].editedText || (state[id].rejectedIdx && state[id].rejectedIdx.length);
+    if (hasData && (!state[id]._hash || state[id]._hash !== sample._hash)) {
+      state[id] = { reviewed: state[id].reviewed, flagged: state[id].flagged, _hash: sample._hash };
+    }
+  }
+  return state[id];
+}
+
+// ── Helpers ──
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function getText(sample) { return getS(sample.id).editedText || sample.text; }
+function getAnns(sample) {
+  const s = getS(sample.id);
+  if ('annotations' in s) return s.annotations;
+  return sample.annotations || [];
+}
+function getRejected(id) { return new Set(getS(id).rejectedIdx || []); }
+function isModified(id) { const s = getS(id); return !!(s.annotations || s.editedText || (s.rejectedIdx && s.rejectedIdx.length)); }
+function typeOptions(selected) { return ENTITY_TYPES.map(t => `<option value="${t}" ${t===selected?'selected':''}>${t}</option>`).join(''); }
+
+// ── Tabs ──
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById('panel-' + name);
+  const tab = document.querySelector(`.tab[data-tab="${name}"]`);
+  if (panel) panel.classList.add('active');
+  if (tab) tab.classList.add('active');
+  if (name === 'stats') renderStats();
+  if (name === 'bulk') initBulk();
+}
+
+// ── Validation ──
+function validateSample(sample) {
+  const text = getText(sample);
+  const anns = getAnns(sample);
+  const rejected = getRejected(sample.id);
+  const warns = [];
+  const active = anns.filter((_, i) => !rejected.has(i));
+  for (let i = 0; i < active.length; i++) {
+    const a = active[i];
+    if (a.start < 0 || a.end > text.length) warns.push('Offset out of bounds: ' + (a.text||''));
+    if (a.start >= a.end) warns.push('Empty span: ' + (a.text||''));
+    for (let j = i + 1; j < active.length; j++) {
+      const b = active[j];
+      if (a.start === b.start && a.end === b.end && a.entity_type === b.entity_type) {
+        warns.push('Duplicate: "' + (a.text||'') + '" [' + a.start + ':' + a.end + ']');
+      } else if (a.start < b.end && b.start < a.end) {
+        warns.push('Overlapping: "' + (a.text||'') + '" [' + a.start + ':' + a.end + '] & "' + (b.text||'') + '" [' + b.start + ':' + b.end + ']');
+      }
+    }
+  }
+  return warns;
+}
+
+// ── Render annotated text ──
+function renderAnnotatedText(sample) {
+  const text = getText(sample);
+  const anns = getAnns(sample);
+  const rejected = getRejected(sample.id);
+  const indexed = anns.map((a, i) => ({ ...a, _i: i })).filter((_, i) => !rejected.has(i));
+  indexed.sort((a, b) => a.start - b.start);
+  let html = '', pos = 0;
+  for (const a of indexed) {
+    if (a.start > pos) html += esc(text.slice(pos, a.start));
+    if (a.start < pos) continue; // skip overlapping
+    const cls = 'ann ann-' + (a.entity_type || 'other');
+    html += `<span class="${cls}" title="${a.entity_type}">${esc(text.slice(a.start, a.end))}<span class="ann-label">${a.entity_type}</span></span>`;
+    pos = a.end;
+  }
+  if (pos < text.length) html += esc(text.slice(pos));
+  return html;
+}
+
+// ── Render sample card ──
+function renderSample(sample) {
+  const s = getS(sample.id);
+  const warns = validateSample(sample);
+  const flaggedCls = s.flagged ? ' flagged' : '';
+  const focusedCls = focusedSampleId === sample.id ? ' focused' : '';
+  const statusBadge = s.flagged ? '<span class="badge badge-flagged">FLAGGED</span>'
+    : s.reviewed ? '<span class="badge badge-reviewed">REVIEWED</span>' : '';
+  const modBadge = isModified(sample.id) ? '<span class="badge badge-modified">MODIFIED</span>' : '';
+  const warnBadge = warns.length ? `<span class="badge badge-warn" title="${warns.map(w=>esc(w)).join('&#10;')}">${warns.length} warning${warns.length>1?'s':''}</span>` : '';
+  const warnDetail = warns.length ? `<div style="font-size:11px;color:#dc3545;background:#fff5f5;padding:4px 8px;border-radius:4px;margin-bottom:6px">${warns.map(w => '&#9888; ' + esc(w)).join('<br>')}</div>` : '';
+  const anns = getAnns(sample);
+  const rejected = getRejected(sample.id);
+
+  let annRows = anns.map((a, i) => {
+    const isRej = rejected.has(i);
+    return `<div class="ann-row${isRej?' rejected':''}">
+      <span class="ann-span" title="${esc(a.text||'')}">"${esc((a.text||'').slice(0,40))}"</span>
+      <select onchange="changeType('${sample.id}',${i},this.value)">${typeOptions(a.entity_type)}</select>
+      <span style="color:#999;font-size:10px">[${a.start}:${a.end}]</span>
+      ${isRej ? `<button class="restore" style="border-color:#28a745;color:#28a745" onclick="restoreAnn('${sample.id}',${i})">Restore</button>`
+              : `<button style="border-color:#dc3545;color:#dc3545" onclick="rejectAnn('${sample.id}',${i})">Remove</button>`}
+    </div>`;
+  }).join('');
+
+  return `<div class="sample${flaggedCls}${focusedCls}" id="s-${sample.id}" onclick="focusSample('${sample.id}')">
+    <div class="sample-header">
+      <span class="sample-id">${sample.id}</span>
+      <span class="badge badge-cat">${sample._category||''}</span>
+      <span class="badge badge-src">${sample.source||''}</span>
+      ${statusBadge}${modBadge}${warnBadge}
+      <span style="font-size:10px;color:#999">${anns.length - (s.rejectedIdx||[]).length} ann.</span>
+    </div>
+    <div class="text-display" id="text-${sample.id}" onmouseup="handleSelection('${sample.id}')">${renderAnnotatedText(sample)}</div>
+    ${s.editedText ? `<div style="font-size:10px;margin-bottom:4px"><span style="color:#1a73e8">Text edited</span> <button onclick="toggleDiff('${sample.id}')" style="font-size:10px;padding:1px 6px;border:1px solid #ddd;border-radius:3px;background:#fff;cursor:pointer">Show diff</button></div><div id="diff-${sample.id}" style="display:none;font-family:monospace;font-size:11px;background:#f8f8f8;padding:8px;border-radius:4px;margin-bottom:6px;white-space:pre-wrap"></div>` : ''}
+    ${warnDetail}
+    <div class="add-bar" id="add-${sample.id}">
+      "<span id="sel-text-${sample.id}"></span>" [<span id="sel-range-${sample.id}"></span>]
+      <select id="sel-type-${sample.id}">${typeOptions('PERSON')}</select>
+      <button class="add" onclick="addAnnotation('${sample.id}')">Add</button>
+      <button onclick="cancelAdd('${sample.id}')" style="background:#e0e0e0;color:#333;border:none">Cancel</button>
+    </div>
+    <div class="edit-text" id="edit-${sample.id}">
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">
+        <span style="font-size:10px;color:#666;align-self:center">Insert fake:</span>
+        <button class="fake-btn" style="background:#ffe066" onclick="insertFake('${sample.id}','name')">PERSON</button>
+        <button class="fake-btn" style="background:#b3e5fc" onclick="insertFake('${sample.id}','email')">EMAIL</button>
+        <button class="fake-btn" style="background:#c8e6c9" onclick="insertFake('${sample.id}','phone')">PHONE</button>
+        <button class="fake-btn" style="background:#ffccbc" onclick="insertFake('${sample.id}','ssn')">SSN</button>
+        <button class="fake-btn" style="background:#e1bee7" onclick="insertFake('${sample.id}','credit_card')">CC</button>
+        <button class="fake-btn" style="background:#b2dfdb" onclick="insertFake('${sample.id}','city')">LOC</button>
+        <button class="fake-btn" style="background:#ffe0b2" onclick="insertFake('${sample.id}','company')">ORG</button>
+        <button class="fake-btn" style="background:#f0f4c3" onclick="insertFake('${sample.id}','npi')">NPI</button>
+        <button class="fake-btn" style="background:#d1c4e9" onclick="insertFake('${sample.id}','mrn')">MRN</button>
+        <button class="fake-btn" style="background:#b2ebf2" onclick="insertFake('${sample.id}','address')">ADDR</button>
+      </div>
+      <textarea id="editarea-${sample.id}">${esc(getText(sample))}</textarea>
+      <div style="font-size:10px;color:#dc3545;margin:4px 0">Editing text clears annotations (re-add after saving)</div>
+      <div style="display:flex;gap:6px">
+        <button style="background:#1a73e8;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px" onclick="saveTextEdit('${sample.id}')">Save</button>
+        <button style="background:#e0e0e0;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px" onclick="cancelTextEdit('${sample.id}')">Cancel</button>
+      </div>
+    </div>
+    <div style="margin-bottom:6px">${annRows}</div>
+    <div class="sample-actions">
+      <button class="btn-suggest" onclick="suggestAnnotations('${sample.id}')">Auto-detect</button>
+      ${undoStack[sample.id] ? `<button onclick="undo('${sample.id}')" style="border-color:#f59e0b;color:#f59e0b">Undo</button>` : ''}
+      <button class="btn-edit" onclick="toggleEditText('${sample.id}')">Edit Text</button>
+      ${s.flagged ? `<button class="btn-flag" onclick="unflag('${sample.id}')">Unflag</button>` : `<button class="btn-flag" onclick="flag('${sample.id}')">Flag Bad</button>`}
+      ${!s.reviewed ? `<button class="btn-approve" onclick="markReviewed('${sample.id}')">Reviewed</button>` : `<button onclick="unmarkReviewed('${sample.id}')" style="color:#666">Unmark</button>`}
+    </div>
+  </div>`;
+}
+
+// ── Filtering & sorting ──
+function applyFilters() {
+  const cat = document.getElementById('filterCat').value;
+  const src = document.getElementById('filterSrc').value;
+  const status = document.getElementById('filterStatus').value;
+  const search = document.getElementById('searchBox').value.toLowerCase();
+  const sort = document.getElementById('sortBy').value;
+
+  filtered = SAMPLES.filter(s => {
+    if (cat && (s._category||'') !== cat) return false;
+    if (src && (s.source||'') !== src) return false;
+    if (search && !s.text.toLowerCase().includes(search) && !s.id.toLowerCase().includes(search)) return false;
+    const st = getS(s.id);
+    if (status === 'flagged' && !st.flagged) return false;
+    if (status === 'reviewed' && !st.reviewed) return false;
+    if (status === 'unreviewed' && (st.reviewed || st.flagged)) return false;
+    if (status === 'modified' && !isModified(s.id)) return false;
+    if (status === 'no_annotations' && getAnns(s).length > 0) return false;
+    if (status === 'has_warnings' && validateSample(s).length === 0) return false;
+    return true;
+  });
+
+  if (sort === 'length_asc') filtered.sort((a,b) => a.text.length - b.text.length);
+  else if (sort === 'length_desc') filtered.sort((a,b) => b.text.length - a.text.length);
+  else if (sort === 'ann_count_asc') filtered.sort((a,b) => (a.annotations||[]).length - (b.annotations||[]).length);
+  else if (sort === 'ann_count_desc') filtered.sort((a,b) => (b.annotations||[]).length - (a.annotations||[]).length);
+  else if (sort === 'source') filtered.sort((a,b) => (a.source||'').localeCompare(b.source||''));
+
+  currentPage = 0;
+  render();
+}
+
+function render() {
+  const start = currentPage * PAGE_SIZE;
+  const page = filtered.slice(start, start + PAGE_SIZE);
+  document.getElementById('sampleList').innerHTML = page.length
+    ? page.map(s => renderSample(s)).join('')
+    : '<p style="padding:40px;text-align:center;color:#999">No samples match filters</p>';
+  document.getElementById('pageCounter').textContent = filtered.length ? `${start+1}-${Math.min(start+PAGE_SIZE,filtered.length)} / ${filtered.length}` : '0';
+  updateAllStats();
+}
+
+// ── Focus ──
+function focusSample(id) {
+  focusedSampleId = id;
+  document.querySelectorAll('.sample').forEach(el => el.classList.remove('focused'));
+  const el = document.getElementById('s-' + id);
+  if (el) el.classList.add('focused');
+}
+
+// ── Selection & annotation ──
+let pendingSel = {};
+function handleSelection(sampleId) {
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed) return;
+  const textEl = document.getElementById('text-' + sampleId);
+  if (!textEl || !textEl.contains(sel.anchorNode) || !textEl.contains(sel.focusNode)) return;
+  const selectedText = sel.toString().trim();
+  if (!selectedText) return;
+  const sample = SAMPLES.find(s => s.id === sampleId);
+  const text = getText(sample);
+  const idx = text.indexOf(selectedText);
+  if (idx === -1) return;
+  pendingSel = { sampleId, text: selectedText, start: idx, end: idx + selectedText.length };
+  focusSample(sampleId);
+  const bar = document.getElementById('add-' + sampleId);
+  bar.classList.add('visible');
+  document.getElementById('sel-text-' + sampleId).textContent = selectedText;
+  document.getElementById('sel-range-' + sampleId).textContent = idx + ':' + (idx + selectedText.length);
+}
+
+function addAnnotation(sampleId) {
+  if (pendingSel.sampleId !== sampleId) return;
+  pushUndo(sampleId);
+  const sample = SAMPLES.find(s => s.id === sampleId);
+  const s = getS(sampleId);
+  if (!s.annotations) s.annotations = [...(sample.annotations||[])];
+  const type = document.getElementById('sel-type-' + sampleId).value;
+  s.annotations.push({ start: pendingSel.start, end: pendingSel.end, text: pendingSel.text, entity_type: type, difficulty: 'standard' });
+  stampHash(sampleId); saveState();
+  cancelAdd(sampleId);
+  render();
+}
+
+function addAnnotationWithType(type) {
+  if (!pendingSel.sampleId) return;
+  const sampleId = pendingSel.sampleId;
+  pushUndo(sampleId);
+  const sample = SAMPLES.find(s => s.id === sampleId);
+  const s = getS(sampleId);
+  if (!s.annotations) s.annotations = [...(sample.annotations||[])];
+  s.annotations.push({ start: pendingSel.start, end: pendingSel.end, text: pendingSel.text, entity_type: type, difficulty: 'standard' });
+  stampHash(sampleId); saveState();
+  cancelAdd(sampleId);
+  render();
+}
+
+function cancelAdd(sampleId) {
+  const bar = document.getElementById('add-' + sampleId);
+  if (bar) bar.classList.remove('visible');
+  pendingSel = {};
+  window.getSelection()?.removeAllRanges();
+}
+
+function rejectAnn(id, idx) { pushUndo(id); const s = getS(id); if (!s.rejectedIdx) s.rejectedIdx = []; if (!s.rejectedIdx.includes(idx)) s.rejectedIdx.push(idx); stampHash(id); saveState(); render(); }
+function restoreAnn(id, idx) { pushUndo(id); const s = getS(id); s.rejectedIdx = (s.rejectedIdx||[]).filter(i => i !== idx); stampHash(id); saveState(); render(); }
+function changeType(id, idx, newType) { pushUndo(id); const sample = SAMPLES.find(s => s.id === id); const s = getS(id); if (!s.annotations) s.annotations = [...(sample.annotations||[])]; s.annotations[idx] = { ...s.annotations[idx], entity_type: newType }; stampHash(id); saveState(); render(); }
+
+// ── Edit text ──
+function insertFake(sampleId, field) {
+  const d = FAKE_PII[Math.floor(Math.random() * FAKE_PII.length)];
+  const vals = {
+    name: d.name, email: d.email, phone: d.phone, ssn: d.ssn,
+    credit_card: d.credit_card, city: d.city, company: d.company,
+    address: d.street + ', ' + d.city + ', ' + d.state + ' ' + d.zip,
+    npi: '1' + String(Math.floor(Math.random() * 900000000) + 100000000),
+    mrn: 'MRN-' + String(Math.floor(Math.random() * 900000) + 100000),
+  };
+  const val = vals[field] || d.name;
+  const ta = document.getElementById('editarea-' + sampleId);
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  ta.value = ta.value.slice(0, start) + val + ta.value.slice(end);
+  ta.selectionStart = ta.selectionEnd = start + val.length;
+  ta.focus();
+}
+
+function insertFakeNew(field) {
+  const d = FAKE_PII[Math.floor(Math.random() * FAKE_PII.length)];
+  const vals = {
+    name: d.name, email: d.email, phone: d.phone, ssn: d.ssn,
+    credit_card: d.credit_card, city: d.city, company: d.company,
+    address: d.street + ', ' + d.city + ', ' + d.state + ' ' + d.zip,
+    npi: '1' + String(Math.floor(Math.random() * 900000000) + 100000000),
+    mrn: 'MRN-' + String(Math.floor(Math.random() * 900000) + 100000),
+  };
+  const val = vals[field] || d.name;
+  const ta = document.getElementById('newText');
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  ta.value = ta.value.slice(0, start) + val + ta.value.slice(end);
+  ta.selectionStart = ta.selectionEnd = start + val.length;
+  ta.focus();
+  updateNewPreview();
+}
+
+function toggleEditText(id) {
+  const el = document.getElementById('edit-' + id);
+  el.classList.toggle('visible');
+  if (el.classList.contains('visible')) {
+    const sample = SAMPLES.find(s => s.id === id);
+    document.getElementById('editarea-' + id).value = getText(sample);
+    document.getElementById('editarea-' + id).focus();
+  }
+}
+function saveTextEdit(id) {
+  pushUndo(id);
+  const newText = document.getElementById('editarea-' + id).value;
+  const sample = SAMPLES.find(s => s.id === id);
+  const s = getS(id);
+  if (newText === sample.text) {
+    delete s.editedText;
+  } else {
+    // Smart offset adjustment: find the first position where old and new
+    // text diverge, compute the delta, and shift annotations accordingly.
+    // Annotations whose span text no longer matches after shifting are dropped.
+    const oldText = getText(sample);
+    const oldAnns = getAnns(sample);
+
+    // Find divergence point from the start
+    let prefixLen = 0;
+    while (prefixLen < oldText.length && prefixLen < newText.length && oldText[prefixLen] === newText[prefixLen]) prefixLen++;
+
+    // Find divergence point from the end
+    let suffixLen = 0;
+    while (suffixLen < (oldText.length - prefixLen) && suffixLen < (newText.length - prefixLen) && oldText[oldText.length - 1 - suffixLen] === newText[newText.length - 1 - suffixLen]) suffixLen++;
+
+    const editStart = prefixLen;
+    const editEndOld = oldText.length - suffixLen;
+    const editEndNew = newText.length - suffixLen;
+    const delta = (editEndNew - editStart) - (editEndOld - editStart);
+
+    const kept = [];
+    for (const ann of oldAnns) {
+      if (!ann.text) continue;
+      let newStart = ann.start;
+      let newEnd = ann.end;
+
+      if (ann.end <= editStart) {
+        // Annotation is entirely before the edit — keep as-is
+      } else if (ann.start >= editEndOld) {
+        // Annotation is entirely after the edit — shift by delta
+        newStart += delta;
+        newEnd += delta;
+      } else {
+        // Annotation overlaps the edit region — check if span text survived
+        const shifted = newText.slice(newStart, newStart + ann.text.length);
+        if (shifted === ann.text) {
+          newEnd = newStart + ann.text.length;
+        } else {
+          continue; // Span was modified — drop annotation
+        }
+      }
+
+      // Verify the span text matches at the new offset
+      if (newStart >= 0 && newEnd <= newText.length && newText.slice(newStart, newEnd) === ann.text) {
+        kept.push({ ...ann, start: newStart, end: newEnd });
+      }
+    }
+    s.editedText = newText;
+    s.annotations = kept;
+    s.rejectedIdx = [];
+  }
+  stampHash(id); saveState(); document.getElementById('edit-' + id).classList.remove('visible'); render();
+}
+function cancelTextEdit(id) { document.getElementById('edit-' + id).classList.remove('visible'); }
+
+function toggleDiff(id) {
+  const el = document.getElementById('diff-' + id);
+  if (!el) return;
+  if (el.style.display !== 'none') { el.style.display = 'none'; return; }
+  const sample = SAMPLES.find(s => s.id === id);
+  const s = getS(id);
+  if (!s.editedText) return;
+  const orig = sample.text;
+  const edited = s.editedText;
+  // Simple word-level diff
+  const origWords = orig.split(/(\s+)/);
+  const editWords = edited.split(/(\s+)/);
+  let html = '';
+  const maxLen = Math.max(origWords.length, editWords.length);
+  let oi = 0, ei = 0;
+  while (oi < origWords.length || ei < editWords.length) {
+    if (oi < origWords.length && ei < editWords.length && origWords[oi] === editWords[ei]) {
+      html += esc(origWords[oi]);
+      oi++; ei++;
+    } else if (oi < origWords.length && editWords.indexOf(origWords[oi], ei) === -1) {
+      html += '<span style="background:#fecaca;text-decoration:line-through">' + esc(origWords[oi]) + '</span>';
+      oi++;
+    } else if (ei < editWords.length) {
+      html += '<span style="background:#bbf7d0">' + esc(editWords[ei]) + '</span>';
+      ei++;
+    } else {
+      oi++; ei++;
+    }
+  }
+  el.innerHTML = html;
+  el.style.display = 'block';
+}
+
+// ── Flag / Review ──
+function flag(id) { pushUndo(id); getS(id).flagged = true; saveState(); render(); }
+function unflag(id) { pushUndo(id); getS(id).flagged = false; saveState(); render(); }
+function markReviewed(id) { getS(id).reviewed = true; saveState(); render(); }
+function unmarkReviewed(id) { getS(id).reviewed = false; saveState(); render(); }
+
+// ── Auto-suggest via API ──
+async function suggestAnnotations(sampleId) {
+  const sample = SAMPLES.find(s => s.id === sampleId);
+  const text = getText(sample);
+  const btn = event?.target;
+  if (btn) { btn.textContent = 'Detecting...'; btn.disabled = true; }
+  try {
+    const cfg = ensureApiConfig();
+    if (!cfg) { if (btn) { btn.textContent = 'Auto-detect'; btn.disabled = false; } return; }
+    const { apiUrl, apiKey } = cfg;
+    const resp = await fetch(apiUrl + '/sanitize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+      body: JSON.stringify({ text, mode: 'sanitize', config: { confidence_threshold: 0.0, entities: ENTITY_TYPES.filter(t => !['DATE_OF_BIRTH','IP_ADDRESS','URL','CREDENTIALS','BANK_ROUTING_NUMBER','REFERENCE_ID'].includes(t)) } }),
+    });
+    if (!resp.ok) { markApiFailed(); alert(describeApiError(resp, apiHostnameLabel())); return; }
+    markApiOk();
+    const data = await resp.json();
+    const typeMap = { EMAIL_ADDRESS: 'EMAIL', PHONE_NUMBER: 'PHONE', ADDRESS: 'LOCATION' };
+    const newAnns = (data.entities || []).map(e => ({
+      start: e.start, end: e.end, text: text.slice(e.start, e.end),
+      entity_type: typeMap[e.type] || e.type, difficulty: 'standard', _suggested: true,
+    }));
+    const s = getS(sampleId);
+    s.annotations = newAnns;
+    s.rejectedIdx = [];
+    saveState(); render();
+  } catch (err) { markApiFailed(); alert(describeNetworkError(err, apiHostnameLabel())); }
+  finally { if (btn) { btn.textContent = 'Auto-detect'; btn.disabled = false; } }
+}
+
+// ── Batch auto-detect ──
+async function batchAutoDetect() {
+  const cfg = ensureApiConfig();
+  if (!cfg) return;
+  const { apiUrl, apiKey } = cfg;
+  const typeMap = { EMAIL_ADDRESS: 'EMAIL', PHONE_NUMBER: 'PHONE', ADDRESS: 'LOCATION' };
+
+  // Only process samples with 0 annotations that aren't flagged
+  const targets = SAMPLES.filter(s => {
+    const st = getS(s.id);
+    if (st.flagged) return false;
+    const anns = getAnns(s);
+    return anns.length === 0;
+  });
+
+  if (!targets.length) {
+    const allTargets = SAMPLES.filter(s => !getS(s.id).flagged);
+    if (!confirm(`No unannotated samples. Run auto-detect on all ${allTargets.length} unflagged samples? This will REPLACE existing annotations.`)) return;
+    targets.push(...allTargets);
+  }
+
+  const total = targets.length;
+  let done = 0, errors = 0, firstErrorMsg = null;
+  const bar = document.getElementById('progressBar');
+  const hostLabel = apiHostnameLabel();
+
+  // Bail-fast threshold: if the first 5 calls all fail, stop and report — saves wasting
+  // time hammering a broken endpoint with 1000s of requests.
+  const BAIL_AFTER = 5;
+
+  for (const sample of targets) {
+    try {
+      const text = getText(sample);
+      const resp = await fetch(apiUrl + '/sanitize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+        body: JSON.stringify({ text, mode: 'sanitize', config: { confidence_threshold: 0.0, entities: ENTITY_TYPES.filter(t => !['DATE_OF_BIRTH','IP_ADDRESS','URL','CREDENTIALS','REFERENCE_ID'].includes(t)) } }),
+      });
+      if (resp.status === 429) {
+        await new Promise(r => setTimeout(r, 2000));
+        done++;
+        continue;
+      }
+      if (!resp.ok) {
+        errors++; done++;
+        if (!firstErrorMsg) firstErrorMsg = describeApiError(resp, hostLabel);
+        if (errors >= BAIL_AFTER && done === errors) {
+          markApiFailed();
+          alert(`Aborted after ${errors} consecutive failures.\n\n${firstErrorMsg}\n\nFix the server then retry batch.`);
+          return;
+        }
+        continue;
+      }
+      markApiOk();
+      const data = await resp.json();
+      const newAnns = (data.entities || []).map(e => ({
+        start: e.start, end: e.end, text: text.slice(e.start, e.end),
+        entity_type: typeMap[e.type] || e.type, difficulty: 'standard',
+      }));
+      const s = getS(sample.id);
+      s.annotations = newAnns;
+      s.rejectedIdx = [];
+      stampHash(sample.id);
+    } catch (err) {
+      errors++;
+      if (!firstErrorMsg) firstErrorMsg = describeNetworkError(err, hostLabel);
+      if (errors >= BAIL_AFTER && done === errors) {
+        markApiFailed();
+        alert(`Aborted after ${errors} consecutive failures.\n\n${firstErrorMsg}\n\nFix the server then retry batch.`);
+        return;
+      }
+    }
+    done++;
+    if (bar) bar.style.width = `${Math.round(done/total*100)}%`;
+    document.getElementById('headerStats').textContent = `Auto-detecting... ${done}/${total} (${errors} errors)`;
+  }
+
+  saveState();
+  render();
+  alert(`Done. Processed ${total} samples (${errors} errors). Review annotations and approve.`);
+}
+
+// ── Create new sample ──
+let newAnns = [];
+let newPendingSel = null;
+let createCounter = SAMPLES.filter(s => s.id.startsWith('custom-')).length;
+
+function toggleCreate() {
+  document.getElementById('createPanel').classList.toggle('visible');
+  if (document.getElementById('createPanel').classList.contains('visible')) {
+    document.getElementById('newText').value=''; newAnns=[]; renderNewAnns();
+    document.getElementById('newPreview').innerHTML='';
+    document.getElementById('newText').focus();
+    document.getElementById('newText').oninput = updateNewPreview;
+    renderFakePII();
+  }
+}
+
+function renderFakePII() {
+  if (!FAKE_PII.length) { document.getElementById('fakePIIPanel').innerHTML = '<span style="color:#999">Faker not available</span>'; return; }
+  const d = FAKE_PII[fakePIIIndex % FAKE_PII.length];
+  const items = [
+    ['PERSON', d.name], ['FIRST', d.first_name], ['LAST', d.last_name],
+    ['SSN', d.ssn], ['PHONE', d.phone], ['EMAIL', d.email],
+    ['CC', d.credit_card], ['ADDR', d.street + ', ' + d.city + ', ' + d.state + ' ' + d.zip],
+    ['CITY', d.city], ['STATE', d.state], ['ORG', d.company],
+    ['DOB', d.dob], ['IP', d.ip], ['URL', d.url],
+  ];
+  document.getElementById('fakePIIPanel').innerHTML = items.map(([label, val]) =>
+    `<span onclick="copyFake(this,'${esc(val)}')" style="background:#fff;border:1px solid #e0d4f0;padding:2px 6px;border-radius:3px;cursor:pointer" title="Click to copy"><strong>${label}:</strong> ${esc(val)}</span>`
+  ).join('');
+}
+
+function refreshFakePII() {
+  fakePIIIndex++;
+  renderFakePII();
+}
+
+function copyFake(el, val) {
+  // Insert at cursor position in textarea, or copy to clipboard
+  const textarea = document.getElementById('newText');
+  if (document.activeElement === textarea || textarea.selectionStart !== undefined) {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    textarea.value = text.slice(0, start) + val + text.slice(end);
+    textarea.selectionStart = textarea.selectionEnd = start + val.length;
+    textarea.focus();
+    updateNewPreview();
+  } else {
+    navigator.clipboard.writeText(val);
+  }
+  // Flash
+  el.style.background = '#d4edda';
+  setTimeout(() => el.style.background = '#fff', 300);
+}
+function updateNewPreview() {
+  const text = document.getElementById('newText').value;
+  if (!text) { document.getElementById('newPreview').innerHTML = ''; return; }
+  const sorted = [...newAnns].sort((a,b) => a.start - b.start);
+  let html = '', pos = 0;
+  for (const a of sorted) { if (a.start > pos) html += esc(text.slice(pos, a.start)); html += `<span class="ann ann-${a.entity_type}">${esc(text.slice(a.start, a.end))}<span class="ann-label">${a.entity_type}</span></span>`; pos = a.end; }
+  if (pos < text.length) html += esc(text.slice(pos));
+  document.getElementById('newPreview').innerHTML = html;
+}
+function handleNewSelection() {
+  const sel = window.getSelection(); if (!sel || sel.isCollapsed) return;
+  const el = document.getElementById('newPreview');
+  if (!el.contains(sel.anchorNode) || !el.contains(sel.focusNode)) return;
+  const st = sel.toString().trim(); if (!st) return;
+  const text = document.getElementById('newText').value;
+  const idx = text.indexOf(st); if (idx === -1) return;
+  newPendingSel = { text: st, start: idx, end: idx + st.length };
+  document.getElementById('newAddBar').classList.add('visible');
+  document.getElementById('newSelText').textContent = st;
+  document.getElementById('newSelRange').textContent = idx + ':' + (idx + st.length);
+}
+function addNewAnnotation() {
+  if (!newPendingSel) return;
+  newAnns.push({ start: newPendingSel.start, end: newPendingSel.end, text: newPendingSel.text, entity_type: document.getElementById('newSelType').value, difficulty: 'standard' });
+  cancelNewAdd(); renderNewAnns(); updateNewPreview();
+}
+function cancelNewAdd() { document.getElementById('newAddBar').classList.remove('visible'); newPendingSel = null; window.getSelection()?.removeAllRanges(); }
+function removeNewAnn(i) { newAnns.splice(i, 1); renderNewAnns(); updateNewPreview(); }
+function renderNewAnns() {
+  const el = document.getElementById('newAnnList');
+  el.innerHTML = newAnns.length ? newAnns.map((a,i) => `<div class="ann-row"><span class="ann-span">"${esc(a.text)}"</span> <span style="color:#1a73e8;font-size:11px;font-weight:500">${a.entity_type}</span> <span style="color:#999;font-size:10px">[${a.start}:${a.end}]</span> <button style="border-color:#dc3545;color:#dc3545" onclick="removeNewAnn(${i})">Remove</button></div>`).join('') : '<div style="font-size:11px;color:#999;padding:4px 8px">Select text in preview to annotate</div>';
+}
+async function suggestNewAnnotations() {
+  const text = document.getElementById('newText').value.trim();
+  if (!text) { alert('Enter text first'); return; }
+  try {
+    const cfg = ensureApiConfig();
+    if (!cfg) return;
+    const { apiUrl, apiKey } = cfg;
+    const resp = await fetch(apiUrl + '/sanitize', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey }, body: JSON.stringify({ text, mode: 'sanitize', config: { confidence_threshold: 0.0 } }) });
+    if (!resp.ok) { markApiFailed(); alert(describeApiError(resp, apiHostnameLabel())); return; }
+    markApiOk();
+    const data = await resp.json();
+    const typeMap = { EMAIL_ADDRESS: 'EMAIL', PHONE_NUMBER: 'PHONE', ADDRESS: 'LOCATION' };
+    newAnns = (data.entities || []).map(e => ({ start: e.start, end: e.end, text: text.slice(e.start, e.end), entity_type: typeMap[e.type] || e.type, difficulty: 'standard' }));
+    renderNewAnns(); updateNewPreview();
+  } catch (err) { markApiFailed(); alert(describeNetworkError(err, apiHostnameLabel())); }
+}
+function saveNewSample() {
+  const text = document.getElementById('newText').value.trim(); if (!text) { alert('Enter text'); return; }
+  createCounter++;
+  const src = document.getElementById('newSource').value || 'manual';
+  const sample = { id: `custom-${src}-${String(createCounter).padStart(4,'0')}`, text, source: src, license: 'proprietary', annotations: [...newAnns], metadata: { category: document.getElementById('newCat').value, domain: document.getElementById('newDomain').value || 'general' }, _category: document.getElementById('newCat').value };
+  ensureHash(sample);
+  SAMPLES.push(sample);
+  const s = getS(sample.id); s.reviewed = true; s.annotations = [...newAnns]; stampHash(sample.id); saveState();
+  document.getElementById('newText').value = ''; newAnns = []; renderNewAnns(); document.getElementById('newPreview').innerHTML = '';
+  applyFilters(); currentPage = Math.max(0, Math.floor((filtered.length - 1) / PAGE_SIZE)); render();
+}
+
+// ── Import ──
+function handleImportFile(event) { for (const file of event.target.files) processImportFile(file); event.target.value = ''; }
+function processImportFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const lines = e.target.result.split('\n').filter(l => l.trim());
+    let imported = 0, errors = 0;
+    for (const line of lines) {
+      try {
+        const sample = JSON.parse(line);
+        if (!sample.text) { errors++; continue; }
+        if (!sample.id) sample.id = 'imp-' + Math.random().toString(36).slice(2, 10);
+        if (!sample.annotations) sample.annotations = [];
+        if (!sample._category) sample._category = sample.metadata?.category || 'custom';
+        if (!sample.source) sample.source = file.name.replace(/\.jsonl?$/, '');
+        ensureHash(sample);
+        SAMPLES.push(sample);
+        imported++;
+      } catch { errors++; }
+    }
+    document.getElementById('importLog').innerHTML += `<div>Imported ${imported} samples from <strong>${file.name}</strong>${errors ? ` (${errors} errors)` : ''}</div>`;
+    initFilters(); applyFilters();
+  };
+  reader.readAsText(file);
+}
+// Drag and drop + API URL indicator init
+document.addEventListener('DOMContentLoaded', () => {
+  updateApiUrlIndicator();
+  const dz = document.getElementById('dropZone');
+  if (dz) {
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('hover'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('hover'));
+    dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('hover'); for (const f of e.dataTransfer.files) processImportFile(f); });
+  }
+});
+
+// ── Bulk operations ──
+function initBulk() {
+  const el = document.getElementById('bulkFlagSrc');
+  const srcs = [...new Set(SAMPLES.map(s => s.source||''))].filter(Boolean).sort();
+  el.innerHTML = srcs.map(s => `<option value="${s}">${s} (${SAMPLES.filter(x => x.source === s).length})</option>`).join('');
+}
+function bulkFlagSource() {
+  const src = document.getElementById('bulkFlagSrc').value;
+  let count = 0;
+  SAMPLES.filter(s => s.source === src).forEach(s => { getS(s.id).flagged = true; count++; });
+  saveState(); document.getElementById('bulkLog').innerHTML += `<div>Flagged ${count} samples from "${src}"</div>`; render();
+}
+function bulkApproveUnmodified() {
+  let count = 0;
+  SAMPLES.forEach(s => { const st = getS(s.id); if (!st.flagged && !st.reviewed && !isModified(s.id)) { st.reviewed = true; count++; } });
+  saveState(); document.getElementById('bulkLog').innerHTML += `<div>Approved ${count} unmodified samples</div>`; render();
+}
+function bulkRemoveType() {
+  const type = document.getElementById('bulkRemoveType').value;
+  let count = 0;
+  SAMPLES.forEach(sample => {
+    const anns = getAnns(sample);
+    const matching = anns.map((a, i) => [a, i]).filter(([a]) => a.entity_type === type);
+    if (matching.length) {
+      const s = getS(sample.id);
+      if (!s.rejectedIdx) s.rejectedIdx = [];
+      matching.forEach(([_, i]) => { if (!s.rejectedIdx.includes(i)) { s.rejectedIdx.push(i); count++; } });
+    }
+  });
+  saveState(); document.getElementById('bulkLog').innerHTML += `<div>Removed ${count} ${type} annotations</div>`; render();
+}
+function bulkUnflagAll() {
+  let count = 0;
+  SAMPLES.forEach(s => { if (getS(s.id).flagged) { getS(s.id).flagged = false; count++; } });
+  saveState(); document.getElementById('bulkLog').innerHTML += `<div>Unflagged ${count} samples</div>`; render();
+}
+
+// ── Stats ──
+function renderStats() {
+  const total = SAMPLES.length;
+  const reviewed = SAMPLES.filter(s => getS(s.id).reviewed).length;
+  const flagged = SAMPLES.filter(s => getS(s.id).flagged).length;
+  const modified = SAMPLES.filter(s => isModified(s.id)).length;
+  const clean = total - flagged;
+
+  const byCat = {}, bySrc = {}, byType = {};
+  SAMPLES.forEach(s => {
+    byCat[s._category||'unknown'] = (byCat[s._category||'unknown']||0) + 1;
+    bySrc[s.source||'unknown'] = (bySrc[s.source||'unknown']||0) + 1;
+    const anns = getAnns(s); const rej = getRejected(s.id);
+    anns.forEach((a, i) => { if (!rej.has(i)) byType[a.entity_type] = (byType[a.entity_type]||0) + 1; });
+  });
+
+  const warns = SAMPLES.reduce((n, s) => n + (validateSample(s).length > 0 ? 1 : 0), 0);
+
+  let html = `
+    <div class="stat-card"><h4>Progress</h4>
+      <div class="stat-row"><span>Total samples</span><span class="val">${total}</span></div>
+      <div class="stat-row"><span>Reviewed</span><span class="val">${reviewed} (${total ? Math.round(reviewed/total*100) : 0}%)</span></div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:${total ? reviewed/total*100 : 0}%"></div></div>
+      <div class="stat-row"><span>Flagged (bad)</span><span class="val" style="color:#dc3545">${flagged}</span></div>
+      <div class="stat-row"><span>Modified</span><span class="val">${modified}</span></div>
+      <div class="stat-row"><span>Clean (exportable)</span><span class="val" style="color:#28a745">${clean}</span></div>
+      <div class="stat-row"><span>With warnings</span><span class="val" style="color:#dc3545">${warns}</span></div>
+    </div>
+    <div class="stat-card"><h4>By Category</h4>${Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `<div class="stat-row"><span>${k}</span><span class="val">${v}</span></div>`).join('')}</div>
+    <div class="stat-card"><h4>By Source</h4>${Object.entries(bySrc).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `<div class="stat-row"><span>${k}</span><span class="val">${v}</span></div>`).join('')}</div>
+    <div class="stat-card"><h4>Annotations by Type</h4>${Object.entries(byType).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `<div class="stat-row"><span>${k}</span><span class="val">${v}</span></div>`).join('')}</div>
+  `;
+  document.getElementById('statsGrid').innerHTML = html;
+}
+
+// ── Export ──
+function exportClean() {
+  const byCategory = {};
+  SAMPLES.forEach(sample => {
+    const s = getS(sample.id);
+    if (s.flagged) return;
+    const cat = sample._category || 'custom';
+    if (!byCategory[cat]) byCategory[cat] = [];
+    const anns = getAnns(sample);
+    const rejected = getRejected(sample.id);
+    const cleanAnns = anns.filter((_, i) => !rejected.has(i)).map(a => ({ start: a.start, end: a.end, text: a.text, entity_type: a.entity_type, difficulty: a.difficulty || 'standard' }));
+    const clean = { ...sample, text: getText(sample), annotations: cleanAnns };
+    delete clean._category;
+    byCategory[cat].push(JSON.stringify(clean));
+  });
+  Object.entries(byCategory).forEach(([cat, lines]) => {
+    const blob = new Blob([lines.join('\n') + '\n'], { type: 'application/jsonl' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${cat}_clean.jsonl`; a.click();
+  });
+}
+
+function exportBIO() {
+  let bio = '';
+  SAMPLES.forEach(sample => {
+    const s = getS(sample.id);
+    if (s.flagged) return;
+    const text = getText(sample);
+    const anns = getAnns(sample).filter((_, i) => !getRejected(sample.id).has(i)).sort((a,b) => a.start - b.start);
+    // Tokenize by whitespace
+    const tokens = []; let pos = 0;
+    for (const m of text.matchAll(/\S+/g)) {
+      tokens.push({ text: m[0], start: m.index, end: m.index + m[0].length });
+    }
+    const lines = tokens.map(tok => {
+      let tag = 'O';
+      for (const ann of anns) {
+        if (tok.start >= ann.start && tok.end <= ann.end) {
+          tag = (tok.start === ann.start ? 'B-' : 'I-') + ann.entity_type;
+          break;
+        }
+      }
+      return tok.text + ' ' + tag;
+    });
+    bio += lines.join('\n') + '\n\n';
+  });
+  const blob = new Blob([bio], { type: 'text/plain' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'annotations.bio'; a.click();
+}
+
+function exportState() {
+  const blob = new Blob([JSON.stringify({ state, customSamples: SAMPLES.filter(s => s.id.startsWith('custom-') || s.id.startsWith('imp-')) }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'annotation_progress.json'; a.click();
+}
+function handleStateFile(event) {
+  const file = event.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.state) { state = data.state; saveState(); }
+      if (data.customSamples) {
+        const existingIds = new Set(SAMPLES.map(s => s.id));
+        data.customSamples.forEach(s => { if (!existingIds.has(s.id)) SAMPLES.push(s); });
+      }
+      initFilters(); applyFilters();
+    } catch { alert('Invalid file'); }
+  };
+  reader.readAsText(file);
+}
+
+// ── Pagination ──
+function prevPage() { if (currentPage > 0) { currentPage--; render(); window.scrollTo(0,0); } }
+function nextPage() { if ((currentPage+1)*PAGE_SIZE < filtered.length) { currentPage++; render(); window.scrollTo(0,0); } }
+
+function approvePageAndNext() {
+  const start = currentPage * PAGE_SIZE;
+  const page = filtered.slice(start, start + PAGE_SIZE);
+  page.forEach(s => { getS(s.id).reviewed = true; });
+  saveState();
+  nextPage();
+}
+
+function approveAndNext() {
+  if (!focusedSampleId) return;
+  getS(focusedSampleId).reviewed = true;
+  saveState();
+  // Focus next sample on page
+  const start = currentPage * PAGE_SIZE;
+  const page = filtered.slice(start, start + PAGE_SIZE);
+  const idx = page.findIndex(s => s.id === focusedSampleId);
+  if (idx >= 0 && idx < page.length - 1) {
+    focusSample(page[idx + 1].id);
+    document.getElementById('s-' + page[idx + 1].id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    // Last on page — go to next page
+    nextPage();
+    setTimeout(() => {
+      const nextStart = currentPage * PAGE_SIZE;
+      const nextPage = filtered.slice(nextStart, nextStart + PAGE_SIZE);
+      if (nextPage.length) focusSample(nextPage[0].id);
+    }, 100);
+  }
+  render();
+}
+
+// ── Stats update ──
+function updateAllStats() {
+  const total = SAMPLES.length;
+  const reviewed = SAMPLES.filter(s => getS(s.id).reviewed).length;
+  const flagged = SAMPLES.filter(s => getS(s.id).flagged).length;
+  const pct = total > 0 ? Math.round((reviewed + flagged) / total * 100) : 0;
+  document.getElementById('headerStats').textContent = `${total} samples | ${reviewed} reviewed | ${flagged} flagged | ${pct}% done`;
+  document.getElementById('exportStats').textContent = `Clean: ${total - flagged} | Reviewed: ${reviewed}/${total}`;
+  const bar = document.getElementById('progressBar');
+  if (bar) bar.style.width = `${pct}%`;
+}
+
+// ── Keyboard shortcuts ──
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight') { nextPage(); return; }
+  if (e.key === 'ArrowLeft') { prevPage(); return; }
+  if (e.key === 'Escape') {
+    if (pendingSel.sampleId) cancelAdd(pendingSel.sampleId);
+    document.getElementById('createPanel').classList.remove('visible');
+    return;
+  }
+  if (e.key === 'n') { toggleCreate(); return; }
+  if (e.key === ' ') { e.preventDefault(); approveAndNext(); return; }
+
+  if (!focusedSampleId) return;
+  if (e.key === 'r') { const s = getS(focusedSampleId); s.reviewed = !s.reviewed; saveState(); render(); return; }
+  if (e.key === 'f') { const s = getS(focusedSampleId); s.flagged = !s.flagged; saveState(); render(); return; }
+  if (e.key === 'e') { toggleEditText(focusedSampleId); return; }
+  if (e.key === 'z') { undo(focusedSampleId); return; }
+  if (e.key === 'a') { suggestAnnotations(focusedSampleId); return; }
+
+  // Number keys for quick entity type assignment on selection
+  if (pendingSel.sampleId && e.key >= '1' && e.key <= '9') {
+    const idx = parseInt(e.key) - 1;
+    if (idx < ENTITY_TYPES.length) {
+      addAnnotationWithType(ENTITY_TYPES[idx]);
+    }
+    return;
+  }
+});
+
+// ── Init ──
+function initFilters() {
+  const cats = [...new Set(SAMPLES.map(s => s._category||''))].filter(Boolean).sort();
+  const srcs = [...new Set(SAMPLES.map(s => s.source||''))].filter(Boolean).sort();
+  document.getElementById('filterCat').innerHTML = '<option value="">All</option>' + cats.map(c => `<option value="${c}">${c} (${SAMPLES.filter(s=>s._category===c).length})</option>`).join('');
+  document.getElementById('filterSrc').innerHTML = '<option value="">All</option>' + srcs.map(s => `<option value="${s}">${s} (${SAMPLES.filter(x=>x.source===s).length})</option>`).join('');
+}
+
+// Type number reference
+document.getElementById('typeNumbers').innerHTML = ENTITY_TYPES.slice(0, 9).map((t, i) => `<div class="shortcut-row"><span class="shortcut-key">${i+1}</span> ${t}</div>`).join('');
+
+['filterCat','filterSrc','filterStatus','sortBy'].forEach(id => document.getElementById(id).addEventListener('change', applyFilters));
+document.getElementById('searchBox').addEventListener('input', applyFilters);
+
+initFilters();
+applyFilters();
+</script>
+</body>
+</html>
