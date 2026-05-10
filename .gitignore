@@ -14,3 +14,10 @@ env/
 .ruff_cache/
 *.log
 .DS_Store
+.gstack/
+
+# Real-data datasets — must never be committed (contain real PII)
+data/generated/gov_emails*.jsonl
+data/generated/*_private.jsonl
+data/gov_emails/
+data/private/
