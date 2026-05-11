@@ -18,6 +18,9 @@ env/
 
 # Real-data datasets — must never be committed (contain real PII)
 data/generated/gov_emails*.jsonl
+data/generated/gov_emails*.json
+data/generated/*.label_studio.json
 data/generated/*_private.jsonl
+data/generated/*_private.json
 data/gov_emails/
 data/private/
