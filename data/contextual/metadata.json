@@ -1,7 +1,7 @@
 {
   "category": "contextual",
   "description": "Paired samples where the same surface string has different ground-truth classifications in different contexts. Used for Context Sensitivity Score (CSS) computation.",
-  "target_count": 200,
+  "target_count": 92,
   "entity_types": [
     "PERSON",
     "LOCATION",
@@ -23,5 +23,6 @@
     "ORGANIZATION",
     "PERSON",
     "PHONE"
-  ]
+  ],
+  "annotation_standard": "independent-blind-gold-v1.0"
 }
