@@ -1,7 +1,7 @@
 {
   "category": "ambiguous",
   "description": "Spans where the same string could be multiple entity types depending on context. Tests disambiguation ability.",
-  "target_count": 300,
+  "target_count": 256,
   "entity_types": [
     "PERSON",
     "PHONE",
@@ -22,5 +22,6 @@
     "ORGANIZATION",
     "PERSON",
     "PHONE"
-  ]
+  ],
+  "annotation_standard": "independent-blind-gold-v1.0"
 }

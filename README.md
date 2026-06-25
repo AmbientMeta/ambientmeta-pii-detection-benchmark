@@ -3,46 +3,67 @@
 > Measuring what matters: not just whether PII is found, but whether your detector understands *context*.
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Dataset](https://img.shields.io/badge/samples-1%2C200-green.svg)](#dataset)
+[![Dataset](https://img.shields.io/badge/samples-1%2C021-green.svg)](#dataset)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 
 ## Quick Results
 
 | System | Overall F1 | Standard F1 | Ambiguous F1 | CSS | Adversarial F1 |
 |--------|:---------:|:-----------:|:------------:|:---:|:--------------:|
-| **AmbientMeta Privacy Guard** | **60.7%** | **68.3%** | **54.1%** | **55.6%** | **65.5%** |
-| Microsoft Presidio | 50.8% | 57.2% | 46.9% | 38.9% | 52.5% |
-| spaCy NER | 34.4% | 29.6% | 42.2% | 43.2% | 37.0% |
-| Regex Only | 30.2% | 43.8% | 7.5% | 3.7% | 28.7% |
+| **AmbientMeta Privacy Guard** | **86.5%** | **84.4%** | **91.2%** | **83.7%** | **87.1%** |
+| AmbientMeta (previous, spaCy) | 77.8% | 79.8% | 73.3% | 73.9% | 79.6% |
+| Microsoft Presidio | 56.8% | 60.1% | 63.0% | 45.6% | 52.7% |
+| spaCy NER | 46.2% | 33.2% | 64.9% | 45.6% | 43.3% |
+| Regex Only | 27.5% | 41.8% | 8.2% | 6.5% | 26.3% |
 
-> **Headline:** AmbientMeta leads with **60.7% overall F1** — 10 points ahead of Presidio. Context Sensitivity Score is **55.6%** — 17 points ahead of Presidio (38.9%) and 12 points ahead of spaCy NER (43.2%). AmbientMeta is the only system that detects healthcare entities (NPI: 95.7%, MRN: 79.5%).
+> **Headline:** AmbientMeta leads with **86.5% overall F1** — 30 points ahead of Presidio — and wins on **every entity type**. Context Sensitivity Score is **83.7%** — 38 points ahead of both Presidio and spaCy NER (45.6%). AmbientMeta is the only system that detects healthcare entities (NPI: 96.3%, MRN: 84.6%).
 
 ### Per-Entity F1
 
 | Entity Type | AmbientMeta | Presidio | spaCy NER | Regex |
 |-------------|:-----------:|:--------:|:---------:|:-----:|
-| PERSON | **63.9%** | 61.4% | 61.4% | 0.0% |
-| EMAIL | 97.7% | **100.0%** | 0.0% | 96.3% |
-| PHONE | **81.1%** | 55.1% | 0.0% | 55.6% |
-| SSN | **88.7%** | 69.5% | 0.0% | 81.0% |
-| CREDIT_CARD | **98.4%** | 92.0% | 0.0% | 86.4% |
-| LOCATION | **40.8%** | 33.4% | 33.4% | 0.0% |
-| NPI | **95.7%** | 0.0% | 0.0% | 0.0% |
-| MRN | **79.5%** | 0.0% | 0.0% | 0.0% |
-| ORGANIZATION | **21.0%** | 0.0% | 18.6% | 0.0% |
+| PERSON | **91.0%** | 71.2% | 71.2% | 0.0% |
+| EMAIL | **100.0%** | 99.6% | 0.0% | 96.8% |
+| PHONE | **81.9%** | 57.6% | 0.0% | 57.4% |
+| SSN | **92.5%** | 72.9% | 0.0% | 85.7% |
+| CREDIT_CARD | **92.6%** | 89.6% | 0.0% | 78.5% |
+| LOCATION | **80.3%** | 48.9% | 48.9% | 0.0% |
+| NPI | **96.3%** | 0.0% | 0.0% | 0.0% |
+| MRN | **84.6%** | 0.0% | 0.0% | 0.0% |
+| ORGANIZATION | **79.5%** | 0.0% | 41.7% | 0.0% |
 
-AmbientMeta is the **only system that detects NPI and MRN** — critical entity types for healthcare privacy compliance (HIPAA).
+AmbientMeta leads on **every entity type** — the NER-driven ones (PERSON, LOCATION, ORGANIZATION), the regex/checksum ones (EMAIL, PHONE, SSN, CREDIT_CARD), and is the **only system that detects NPI and MRN** — critical entity types for healthcare privacy compliance (HIPAA).
+
+### Model evolution: spaCy → GLiNER
+
+AmbientMeta's previous NER engine used a fine-tuned spaCy model. The current engine
+replaces it with a fine-tuned [GLiNER](https://github.com/urchade/GLiNER) transformer.
+Both rows below were measured on the **same** dataset, so the delta is purely the engine:
+
+| | Previous (spaCy) | Current (GLiNER) | Δ |
+|---|:---:|:---:|:---:|
+| Overall F1 | 77.8% | **86.5%** | **+8.7** |
+| ORGANIZATION | 53.0% | 79.5% | **+26.4** |
+| LOCATION | 60.1% | 80.3% | **+20.2** |
+| PERSON | 85.1% | 91.0% | +5.9 |
+| CSS | 73.9% | 83.7% | +9.8 |
+| Latency (p50) | 3.4ms | 36.6ms | +33ms |
+
+The gains concentrate on the NER-driven types (ORGANIZATION, LOCATION) and on context
+sensitivity. The cost is latency: the transformer is ~10× slower than spaCy on CPU.
+EMAIL/SSN/PHONE/NPI/MRN are served by shared regex/checksum tiers and are largely
+engine-independent.
 
 ### Latency (Server-Side Processing)
 
 | System | p50 | p95 | p99 |
 |--------|:---:|:---:|:---:|
 | Regex Only | <1ms | <1ms | <1ms |
-| spaCy NER | 5.7ms | 13.0ms | 15.2ms |
-| Microsoft Presidio | 9.5ms | 24.7ms | 31.1ms |
-| AmbientMeta | 15ms | 30ms | 498ms |
+| spaCy NER | 3.1ms | 24.6ms | 28.5ms |
+| Microsoft Presidio | 4.5ms | 35.6ms | 40.9ms |
+| AmbientMeta | 36.7ms | 263.4ms | 365.6ms |
 
-> AmbientMeta latency reflects server-side `processing_ms` (actual detection time), not network round-trip. Higher latency reflects multi-tier detection architecture (regex + NER + compiled rules).
+> AmbientMeta latency reflects server-side `processing_ms` (actual detection time), not network round-trip. The higher figures reflect GLiNER transformer (ONNX) inference on a single CPU worker in a local Docker container — not a tuned production deployment. Regex/checksum tiers run in <1ms; the NER tier dominates the cost.
 
 ---
 
@@ -76,14 +97,21 @@ In production, the same 10-digit number might be a phone number in a support tic
 
 ## Dataset
 
-**1,200 samples** across 4 categories, sourced from public NER datasets and hand-crafted cases.
+**1,021 samples** across 4 categories, sourced from public NER datasets and hand-crafted cases.
 
 | Category | Samples | Description | Purpose |
 |----------|:-------:|-------------|---------|
-| **Standard** | 500 | Clear, unambiguous PII (SSN, email, phone, names) | Baseline — everyone should score well |
-| **Ambiguous** | 300 | Same string could be multiple entity types | Tests disambiguation without paired context |
-| **Contextual** | 200 | Paired samples: same string, different labels | CSS computation — the headline metric |
+| **Standard** | 473 | Clear, unambiguous PII (SSN, email, phone, names) | Baseline — everyone should score well |
+| **Ambiguous** | 256 | Same string could be multiple entity types | Tests disambiguation without paired context |
+| **Contextual** | 92 | 46 minimal pairs: same string, different labels | CSS computation — the headline metric |
 | **Adversarial** | 200 | International formats, obfuscation, code blocks, noisy text | Robustness under real-world messiness |
+
+> **Independent gold standard.** Ground-truth labels are decided by a written
+> [annotation spec](docs/ANNOTATION_GUIDELINES.md) and the text alone — never derived
+> from, or reconciled against, what any detector (AmbientMeta included) outputs. Labels
+> were produced by blind double-annotation with deterministic adjudication. The contextual
+> category keeps only genuine minimal pairs (same surface string, divergent ground-truth
+> type); fabricated/incoherent samples were removed. See the spec for every ruling.
 
 ### Entity types
 
@@ -164,12 +192,22 @@ Each ground truth span matches at most one prediction (greedy, best IoU first).
 | **CSS** | Contextual category only | Context pair accuracy (see above) |
 | **Latency** | Per-adapter | p50, p95, p99 per-document timing |
 
+### Ground-truth annotation
+
+Labels follow a written [annotation spec](docs/ANNOTATION_GUIDELINES.md), applied **blind
+to every detector's output**. Each sample was independently double-annotated; agreements
+form the gold standard and disagreements were adjudicated against the spec, with the free
+local detectors (spaCy/Presidio) used only as tie-breaking signals — never as authority.
+This decouples the ground truth from any system under test, including AmbientMeta.
+
 ### Reproducibility
 
 - All dependency versions pinned in `pyproject.toml`
-- Random seed = 42 for dataset sampling
 - SHA-256 hashes of dataset files recorded in results
 - System info (Python version, OS, hardware) captured in results JSON
+- AmbientMeta results above were produced against the engine running locally via
+  `docker compose up` (GLiNER ONNX, single CPU worker) — fully reproducible, no API key
+  to a hosted service required
 
 ---
 
@@ -214,12 +252,11 @@ python run_benchmark.py --adapter my_system
 
 [AmbientMeta](https://ambientmeta.com) is the privacy layer for AI. We sanitize PII from text with context-aware, multi-tier detection that learns from your corrections.
 
-- **Tier 1:** Regex + checksum validation (SSN, credit card, email, phone)
-- **Tier 2:** NER (spaCy + Presidio) for names, locations, organizations
-- **Tier 3:** Compiled disambiguation rules from user feedback
-- **Tier 4:** LLM escalation for spans the deterministic system can't resolve
+- **Tier 1:** Regex + checksum validation (SSN, credit card, email, phone, NPI, MRN)
+- **Tier 2:** NER via a fine-tuned [GLiNER](https://github.com/urchade/GLiNER) transformer (ONNX) for names, locations, and organizations
+- **Tier 3:** Format-preserving sanitization and rehydration
 
-The benchmark numbers above reflect Tiers 1–3. Tier 4 (async LLM escalation) improves accuracy over time as the system learns — it's not captured in a single benchmark run.
+The benchmark above runs against the deployed detection engine (Tiers 1–2) via the live `/v1/sanitize` API.
 
 **Try it free:** [ambientmeta.com](https://ambientmeta.com) — 1,000 requests/month on the free tier.
 

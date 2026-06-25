@@ -33,10 +33,15 @@ Contextual samples additionally include a `context_pair` field linking to the pa
 
 | Category | Samples | Description |
 |----------|:-------:|-------------|
-| Standard | 500 | Clear, unambiguous PII. Baseline — all systems should score well. |
-| Ambiguous | 300 | Same string could be multiple entity types. Tests disambiguation. |
-| Contextual | 200 | Paired samples: same string, different labels. Used for CSS. |
+| Standard | 473 | Clear, unambiguous PII. Baseline — all systems should score well. |
+| Ambiguous | 256 | Same string could be multiple entity types. Tests disambiguation. |
+| Contextual | 92 | 46 minimal pairs: same string, different labels. Used for CSS. |
 | Adversarial | 200 | Edge cases: international formats, obfuscation, code blocks, noisy text. |
+
+Ground-truth labels are an **independent gold standard** produced by blind double-annotation
+against [`../docs/ANNOTATION_GUIDELINES.md`](../docs/ANNOTATION_GUIDELINES.md), decoupled from
+any detector's output. The text samples are sourced from the public corpora below; the
+annotations are not.
 
 ## Entity Types
 

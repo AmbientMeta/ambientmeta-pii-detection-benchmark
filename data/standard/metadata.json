@@ -1,7 +1,7 @@
 {
   "category": "standard",
   "description": "Clear, unambiguous PII entities. Baseline category where all systems should score well.",
-  "target_count": 500,
+  "target_count": 473,
   "entity_types": [
     "PERSON",
     "EMAIL",
@@ -25,5 +25,6 @@
     "PERSON",
     "PHONE",
     "SSN"
-  ]
+  ],
+  "annotation_standard": "independent-blind-gold-v1.0"
 }

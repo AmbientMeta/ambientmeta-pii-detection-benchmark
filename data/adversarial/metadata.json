@@ -27,5 +27,6 @@
     "PERSON",
     "PHONE",
     "SSN"
-  ]
+  ],
+  "annotation_standard": "independent-blind-gold-v1.0"
 }
